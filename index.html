@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhật Ký Biến Động Lưới Điện ver 1.0.0</title>
+    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.0</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS -->
@@ -191,6 +191,16 @@
                                 <option value="ALL">Tất cả</option>
                             </select>
                         </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tiến độ</label>
+                            <select id="filterStatus" onchange="handleSearch()" class="w-full md:w-44 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                                <option value="ALL">Tất cả</option>
+                                <option value="MISSING_PMIS">Chưa cập nhật PMIS</option>
+                                <option value="MISSING_OMS">Chưa cập nhật OMS</option>
+                                <option value="MISSING_CMIS">Chưa cập nhật CMIS</option>
+                                <option value="MISSING_AUTOCAD">Chưa cập nhật Autocad</option>
+                            </select>
+                        </div>
                         <div class="flex-grow">
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tìm kiếm</label>
                             <div class="relative">
@@ -199,7 +209,7 @@
                             </div>
                         </div>
                     </div>
-                    <button onclick="loadHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                    <button onclick="refreshHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                         <i class="fa-solid fa-rotate"></i> Làm mới
                     </button>
                 </div>
@@ -372,39 +382,112 @@
 
             <!-- ================== VIEW DETAILS MODAL ================== -->
             <div id="viewModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 hidden">
-                <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col fade-in">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto flex flex-col fade-in">
                     <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10">
                         <h3 class="font-bold text-slate-800"><i class="fa-solid fa-circle-info text-blue-600 mr-2"></i> Chi Tiết Biến Động</h3>
                         <button onclick="closeViewModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
                     </div>
-                    <div class="p-6 space-y-4 text-sm text-slate-700">
-                        <div class="grid grid-cols-2 gap-4 border-b border-slate-100 pb-4">
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ngày biến động</p><p id="view_ngay" class="font-semibold text-slate-900 break-words"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Trạng thái</p><span id="view_trang_thai" class="px-2 py-1 rounded-full text-xs font-bold border inline-block break-words"></span></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Phát tuyến</p><p id="view_tuyen" class="font-bold text-blue-600 break-words"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vị trí trụ</p><p id="view_vi_tri" class="font-medium break-words"></p></div>
-                        </div>
-                        <div class="grid grid-cols-3 gap-4 border-b border-slate-100 pb-4">
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thiết bị</p><p id="view_thiet_bi" class="font-medium bg-slate-100 inline-block px-2 py-0.5 rounded break-words max-w-full"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pha</p><p id="view_pha" class="font-medium break-words"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tài sản</p><p id="view_tai_san" class="font-medium break-words"></p></div>
-                        </div>
-                        <div class="border-b border-slate-100 pb-4 min-w-0">
-                            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nguyên nhân / Nội dung biến động</p>
-                            <p id="view_noidung" class="mt-1 bg-blue-50/50 p-3 rounded-lg border border-blue-100 text-slate-800 leading-relaxed break-words"></p>
-                        </div>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-slate-100 pb-4">
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Đơn vị thực hiện</p><p id="view_donvi" class="font-medium break-words"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ghi chú thêm</p><p id="view_ghichu" class="italic text-slate-600 break-words"></p></div>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Người nhập</p><p id="view_nguoinhap" class="font-semibold text-slate-800 break-words"></p></div>
-                            <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thời gian nhập</p><p id="view_thoigian" class="text-xs text-slate-500 break-words"></p></div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                            <!-- Cột trái (Thông tin chi tiết) -->
+                            <div class="lg:col-span-3 space-y-4 text-sm text-slate-700 lg:border-r border-slate-100 lg:pr-8">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ngày biến động</p><p id="view_ngay" class="font-semibold text-slate-900 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Trạng thái</p><span id="view_trang_thai" class="px-2 py-1 rounded-full text-xs font-bold border inline-block break-words"></span></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Phát tuyến</p><p id="view_tuyen" class="font-bold text-blue-600 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vị trí trụ</p><p id="view_vi_tri" class="font-medium break-words"></p></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thiết bị</p><p id="view_thiet_bi" class="font-medium bg-slate-100 inline-block px-2 py-0.5 rounded break-words max-w-full"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pha</p><p id="view_pha" class="font-medium break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tài sản</p><p id="view_tai_san" class="font-medium break-words"></p></div>
+                                </div>
+                                <div class="border-b border-slate-100 pb-4 min-w-0">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nguyên nhân / Nội dung biến động</p>
+                                    <p id="view_noidung" class="mt-1 bg-blue-50/50 p-3 rounded-lg border border-blue-100 text-slate-800 leading-relaxed break-words"></p>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Đơn vị thực hiện</p><p id="view_donvi" class="font-medium break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ghi chú thêm</p><p id="view_ghichu" class="italic text-slate-600 break-words"></p></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Người nhập</p><p id="view_nguoinhap" class="font-semibold text-slate-800 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thời gian nhập</p><p id="view_thoigian" class="text-xs text-slate-500 break-words"></p></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Cột phải (Checklist) -->
+                            <div class="lg:col-span-1">
+                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4"><i class="fa-solid fa-list-check mr-2"></i>Tiến độ cập nhật</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_pmis" onclick="handleCheck(event, 'chk_pmis')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật PMIS</span>
+                                        </label>
+                                        <div id="info_chk_pmis" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_pmis" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_pmis"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_oms" onclick="handleCheck(event, 'chk_oms')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật OMS</span>
+                                        </label>
+                                        <div id="info_chk_oms" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_oms" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_oms"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_cmis" onclick="handleCheck(event, 'chk_cmis')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật CMIS</span>
+                                        </label>
+                                        <div id="info_chk_cmis" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_cmis" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_cmis"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_autocad" onclick="handleCheck(event, 'chk_autocad')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật Autocad</span>
+                                        </label>
+                                        <div id="info_chk_autocad" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_autocad" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_autocad"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end">
+                    <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end mt-auto">
                         <button onclick="closeViewModal()" class="px-6 py-2.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition-colors">ĐÓNG</button>
                     </div>
+                </div>
+            </div>
+
+            <!-- ================== CONFIRM PASSWORD MODAL ================== -->
+            <div id="confirmPasswordModal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center z-[60] p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-sm fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-shield-halved text-blue-600 mr-2"></i> Xác thực tài khoản</h3>
+                        <button type="button" onclick="closeConfirmPasswordModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <form id="confirmPasswordForm" onsubmit="submitConfirmPassword(event)" class="p-6">
+                        <p class="text-sm text-slate-600 mb-4">Vui lòng nhập mật khẩu của bạn để xác nhận cập nhật trạng thái.</p>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mật khẩu</label>
+                            <input type="password" id="confirmActionPassword" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" onclick="closeConfirmPasswordModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors text-sm">Hủy</button>
+                            <button type="submit" id="btnConfirmAction" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-check"></i> XÁC NHẬN</button>
+                        </div>
+                    </form>
                 </div>
             </div>
 
@@ -463,6 +546,10 @@
         let sessionData = [];
         let allHistoryData = [];
         let currentDisplayLimit = 20; // Giới hạn số dòng hiển thị mặc định
+        
+        let currentViewRecordId = null; // Biến lưu ID bản ghi đang xem chi tiết
+        let targetCheckType = null;     // Biến lưu loại checklist đang click (pmis, oms...)
+        let desiredCheckState = false;  // Biến lưu trạng thái mong muốn (true/false)
 
         // 3. DOM ELEMENTS
         const authScreen = document.getElementById('authScreen');
@@ -682,6 +769,13 @@
         }
 
         // --- History & Tables ---
+        function refreshHistory() {
+            document.getElementById('filterTuyen').value = 'ALL';
+            document.getElementById('filterStatus').value = 'ALL';
+            document.getElementById('searchInput').value = '';
+            loadHistory();
+        }
+
         async function loadHistory() {
             const tbody = document.getElementById('historyTableBody');
             const loadMoreBtn = document.getElementById('loadMoreContainer');
@@ -727,13 +821,26 @@
 
         function filterTableLocal() {
             const term = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('filterStatus').value;
             let filtered = allHistoryData;
             
+            // 1. Lọc theo từ khóa tìm kiếm
             if (term) {
-                filtered = allHistoryData.filter(item => 
+                filtered = filtered.filter(item => 
                     (item.vi_tri_tru && item.vi_tri_tru.toLowerCase().includes(term)) || 
                     (item.nguyen_nhan && item.nguyen_nhan.toLowerCase().includes(term))
                 );
+            }
+
+            // 2. Lọc theo trạng thái cập nhật (Tiến độ)
+            if (statusFilter !== 'ALL') {
+                filtered = filtered.filter(item => {
+                    if (statusFilter === 'MISSING_PMIS') return !item.chk_pmis;
+                    if (statusFilter === 'MISSING_OMS') return !item.chk_oms;
+                    if (statusFilter === 'MISSING_CMIS') return !item.chk_cmis;
+                    if (statusFilter === 'MISSING_AUTOCAD') return !item.chk_autocad;
+                    return true;
+                });
             }
             
             renderHistoryTable(filtered);
@@ -755,7 +862,15 @@
 
             tbody.innerHTML = renderData.map(item => `
                 <tr onclick="openViewModal('${item.id}')" class="hover:bg-blue-50 transition-colors cursor-pointer group">
-                    <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap"><i class="fa-regular fa-calendar text-slate-400"></i> ${formatDate(item.ngay_bien_dong)}</td>
+                    <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">
+                        <div class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-slate-400"></i> ${formatDate(item.ngay_bien_dong)}</div>
+                        <div class="flex items-center gap-1 mt-1.5">
+                            <span class="${item.chk_pmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="PMIS">P</span>
+                            <span class="${item.chk_oms ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="OMS">O</span>
+                            <span class="${item.chk_cmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="CMIS">C</span>
+                            <span class="${item.chk_autocad ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="Autocad">A</span>
+                        </div>
+                    </td>
                     <td class="px-4 py-3 max-w-[150px]">
                         <div class="font-bold text-blue-600 truncate" title="${item.tuyen}">${item.tuyen}</div>
                         <div class="text-slate-500 text-xs truncate" title="${item.vi_tri_tru}"><i class="fa-solid fa-location-dot text-[10px]"></i> ${item.vi_tri_tru}</div>
@@ -859,6 +974,8 @@
             const record = allHistoryData.find(item => item.id == id);
             if(!record) return;
 
+            currentViewRecordId = record.id;
+
             document.getElementById('view_ngay').innerText = formatDate(record.ngay_bien_dong);
             
             const trangThaiEl = document.getElementById('view_trang_thai');
@@ -880,11 +997,156 @@
             document.getElementById('view_nguoinhap').innerText = record.nguoi_nhap || 'N/A';
             document.getElementById('view_thoigian').innerText = formatDateTime(record.thoi_gian_nhap);
 
+            // Cập nhật trạng thái các ô checklist và thông tin người cập nhật
+            const checkTypes = ['chk_pmis', 'chk_oms', 'chk_cmis', 'chk_autocad'];
+            const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
+
+            checkTypes.forEach(chk => {
+                const isChecked = record[chk] || false;
+                const chkInput = document.getElementById(chk);
+                const labelEl = chkInput.closest('label');
+
+                chkInput.checked = isChecked;
+
+                // Xử lý khóa UI nếu đã check và người dùng không phải admin
+                if (isChecked && !isAdmin) {
+                    labelEl.classList.remove('cursor-pointer', 'hover:bg-blue-50');
+                    labelEl.classList.add('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
+                } else {
+                    labelEl.classList.add('cursor-pointer', 'hover:bg-blue-50');
+                    labelEl.classList.remove('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
+                }
+                
+                const infoDiv = document.getElementById(`info_${chk}`);
+                if (isChecked && record[`${chk}_user`]) {
+                    document.getElementById(`user_${chk}`).innerText = record[`${chk}_user`];
+                    document.getElementById(`time_${chk}`).innerText = formatDateTime(record[`${chk}_time`]);
+                    infoDiv.classList.remove('hidden');
+                } else {
+                    infoDiv.classList.add('hidden');
+                }
+            });
+
             document.getElementById('viewModal').classList.remove('hidden');
         }
 
         function closeViewModal() {
             document.getElementById('viewModal').classList.add('hidden');
+            currentViewRecordId = null;
+        }
+
+        // --- Logic Xử lý Checkbox & Mật khẩu ---
+        function handleCheck(event, type) {
+            event.preventDefault(); // Chặn đổi UI ngay lập tức
+            
+            if(currentUserProfile.role === 'viewer') {
+                showToast('Lỗi phân quyền', 'Tài khoản Viewer không có quyền cập nhật.', 'error');
+                return;
+            }
+
+            const record = allHistoryData.find(item => item.id == currentViewRecordId);
+            if(!record) return;
+
+            const isCurrentlyChecked = record[type] || false;
+
+            // KIỂM TRA QUYỀN UNCHECK: Nếu đã check rồi thì chỉ admin mới được bỏ check
+            if (isCurrentlyChecked && currentUserProfile.role !== 'admin') {
+                showToast('Bị khóa', 'Tiến độ đã được đánh dấu hoàn thành. Chỉ Admin mới có quyền bỏ đánh dấu.', 'error');
+                return;
+            }
+
+            targetCheckType = type;
+            desiredCheckState = !isCurrentlyChecked;
+
+            document.getElementById('confirmActionPassword').value = '';
+            document.getElementById('confirmPasswordModal').classList.remove('hidden');
+            setTimeout(() => document.getElementById('confirmActionPassword').focus(), 100);
+        }
+
+        function closeConfirmPasswordModal() {
+            document.getElementById('confirmPasswordModal').classList.add('hidden');
+            targetCheckType = null;
+        }
+
+        async function submitConfirmPassword(e) {
+            e.preventDefault();
+            const pwd = document.getElementById('confirmActionPassword').value;
+            const btn = document.getElementById('btnConfirmAction');
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>...`;
+            btn.disabled = true;
+
+            try {
+                // 1. Xác thực bằng mật khẩu
+                const { error: authError } = await supabaseClient.auth.signInWithPassword({
+                    email: currentUser.email,
+                    password: pwd
+                });
+
+                if (authError) {
+                    throw new Error('Mật khẩu không chính xác.');
+                }
+
+                // 2. Cập nhật vào DB
+                const currentTime = new Date().toISOString();
+                const payload = {
+                    [targetCheckType]: desiredCheckState,
+                    [`${targetCheckType}_user`]: desiredCheckState ? currentUserProfile.full_name : null,
+                    [`${targetCheckType}_time`]: desiredCheckState ? currentTime : null
+                };
+
+                const { error: updateError } = await supabaseClient
+                    .from('bien_dong_luoi_dien')
+                    .update(payload)
+                    .eq('id', currentViewRecordId);
+
+                if (updateError) throw updateError;
+
+                // 3. Cập nhật local data & UI
+                const recordIndex = allHistoryData.findIndex(item => item.id == currentViewRecordId);
+                if (recordIndex !== -1) {
+                    allHistoryData[recordIndex][targetCheckType] = desiredCheckState;
+                    allHistoryData[recordIndex][`${targetCheckType}_user`] = payload[`${targetCheckType}_user`];
+                    allHistoryData[recordIndex][`${targetCheckType}_time`] = payload[`${targetCheckType}_time`];
+                }
+                
+                // Thay đổi trạng thái UI của checkbox
+                document.getElementById(targetCheckType).checked = desiredCheckState;
+                const chkInput = document.getElementById(targetCheckType);
+                const labelEl = chkInput.closest('label');
+                const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
+
+                // Khóa lại ngay lập tức nếu cập nhật thành check (và người dùng ko phải admin)
+                if (desiredCheckState && !isAdmin) {
+                    labelEl.classList.remove('cursor-pointer', 'hover:bg-blue-50');
+                    labelEl.classList.add('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
+                } else {
+                    labelEl.classList.add('cursor-pointer', 'hover:bg-blue-50');
+                    labelEl.classList.remove('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
+                }
+
+                const infoDiv = document.getElementById(`info_${targetCheckType}`);
+                if (desiredCheckState) {
+                    document.getElementById(`user_${targetCheckType}`).innerText = currentUserProfile.full_name;
+                    document.getElementById(`time_${targetCheckType}`).innerText = formatDateTime(currentTime);
+                    infoDiv.classList.remove('hidden');
+                } else {
+                    infoDiv.classList.add('hidden');
+                }
+
+                // Cập nhật lại UI bảng bên ngoài lập tức
+                filterTableLocal();
+
+                showToast('Thành công', 'Đã cập nhật tiến độ.', 'success');
+                closeConfirmPasswordModal();
+
+            } catch (err) {
+                showToast('Thất bại', err.message, 'error');
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
 
         async function handleUpdateBienDong(e) {
@@ -934,7 +1196,15 @@
             document.getElementById('sessionCount').innerText = sessionData.length;
             const tbody = document.getElementById('sessionTableBody');
             const row = `<tr class="bg-blue-50 animate-pulse-once border-b border-blue-100 hover:bg-blue-100 transition-colors">
-                <td class="px-4 py-3 text-xs font-mono text-slate-500 whitespace-nowrap">${formatTimeOnly(new Date())}</td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                    <div class="text-xs font-mono text-slate-500">${formatTimeOnly(new Date())}</div>
+                    <div class="flex items-center gap-1 mt-1">
+                        <span class="${item.chk_pmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="PMIS">P</span>
+                        <span class="${item.chk_oms ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="OMS">O</span>
+                        <span class="${item.chk_cmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="CMIS">C</span>
+                        <span class="${item.chk_autocad ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="Autocad">A</span>
+                    </div>
+                </td>
                 <td class="px-4 py-3"><div class="font-bold text-blue-700 text-sm">${item.tuyen}</div><div class="text-xs text-slate-600">${item.vi_tri_tru}</div></td>
                 <td class="px-4 py-3"><div class="text-xs font-semibold">${item.thiet_bi}</div><div class="text-[10px] text-slate-500">${item.pha} • <span class="${item.tai_san === 'ĐL' ? 'text-black font-bold' : item.tai_san === 'KH' ? 'text-blue-600 font-bold' : item.tai_san === 'ĐN' ? 'text-red-600 font-bold' : ''}">${item.tai_san}</span></div></td>
                 <td class="px-4 py-3 max-w-xs"><div class="truncate text-sm text-slate-700" title="${item.nguyen_nhan}">${item.nguyen_nhan}</div>${item.ghi_chu ? `<div class="truncate text-xs text-slate-400 italic" title="${item.ghi_chu}">${item.ghi_chu}</div>` : ''}</td>
