@@ -1039,10 +1039,10 @@
         function handleCheck(event, type) {
             event.preventDefault(); // Chặn đổi UI ngay lập tức
             
-            if(currentUserProfile.role === 'viewer') {
-                showToast('Lỗi phân quyền', 'Tài khoản Viewer không có quyền cập nhật.', 'error');
-                return;
-            }
+            // if(currentUserProfile.role === 'viewer') {
+            //    showToast('Lỗi phân quyền', 'Tài khoản Viewer không có quyền cập nhật.', 'error');
+            //    return;
+            // }
 
             const record = allHistoryData.find(item => item.id == currentViewRecordId);
             if(!record) return;
