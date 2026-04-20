@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.1</title>
+    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.2</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS -->
@@ -879,13 +879,13 @@
                         <span class="bg-slate-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded border border-slate-200">${item.thiet_bi}</span>
                         <div class="text-[10px] text-slate-500 mt-1">${item.pha} • <span class="${item.tai_san === 'ĐL' ? 'text-black font-bold' : item.tai_san === 'KH' ? 'text-blue-600 font-bold' : item.tai_san === 'ĐN' ? 'text-red-600 font-bold' : ''}">${item.tai_san}</span></div>
                     </td>
-                    <td class="px-4 py-3 max-w-[200px] truncate text-slate-700" title="${item.nguyen_nhan}">
+                    <td class="px-4 py-3 min-w-[250px] whitespace-normal break-words text-slate-700">
                         ${item.nguyen_nhan}
                     </td>
-                    <td class="px-4 py-3 text-sm text-slate-600 max-w-[100px] truncate" title="${item.don_vi_thuc_hien || '-'}">
+                    <td class="px-4 py-3 min-w-[120px] whitespace-normal break-words text-sm text-slate-600">
                         ${item.don_vi_thuc_hien || '-'}
                     </td>
-                    <td class="px-4 py-3 max-w-[150px] truncate text-sm text-slate-500 italic" title="${item.ghi_chu || '-'}">
+                    <td class="px-4 py-3 min-w-[180px] whitespace-normal break-words text-sm text-slate-500 italic">
                         ${item.ghi_chu || '-'}
                     </td>
                     <td class="px-4 py-3 text-center whitespace-nowrap">
