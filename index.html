@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.3</title>
+    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.5</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Supabase JS -->
@@ -183,11 +183,17 @@
 
             <!-- TAB 2: HISTORY TABLE -->
             <div id="contentHistory" class="hidden fade-in space-y-4">
-                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-end">
-                    <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-end flex-wrap">
+                    <div class="flex flex-wrap gap-4 w-full md:w-auto flex-grow">
                         <div>
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Lọc Tuyến</label>
-                            <select id="filterTuyen" onchange="loadHistory()" class="w-full md:w-40 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                            <select id="filterTuyen" onchange="loadHistory()" class="w-full md:w-36 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                                <option value="ALL">Tất cả</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Người nhập</label>
+                            <select id="filterNguoiNhap" onchange="handleSearch()" class="w-full md:w-40 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
                                 <option value="ALL">Tất cả</option>
                             </select>
                         </div>
@@ -201,15 +207,22 @@
                                 <option value="MISSING_AUTOCAD">Chưa cập nhật Autocad</option>
                             </select>
                         </div>
-                        <div class="flex-grow">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Sắp xếp</label>
+                            <select id="sortBy" onchange="handleSearch()" class="w-full md:w-48 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                                <option value="TIME_DESC">Theo thời gian nhập (Mặc định)</option>
+                                <option value="DATE_DESC">Theo ngày biến động</option>
+                            </select>
+                        </div>
+                        <div class="flex-grow min-w-[200px]">
                             <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tìm kiếm</label>
                             <div class="relative">
                                 <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
-                                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm trụ, nội dung..." class="w-full md:w-64 pl-8 p-2 border border-slate-300 rounded-lg text-sm">
+                                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm trụ, nội dung..." class="w-full pl-8 p-2 border border-slate-300 rounded-lg text-sm">
                             </div>
                         </div>
                     </div>
-                    <button onclick="refreshHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                    <button onclick="refreshHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors shrink-0">
                         <i class="fa-solid fa-rotate"></i> Làm mới
                     </button>
                 </div>
@@ -688,6 +701,7 @@
         // --- Data Loading ---
         async function initAppData() {
             await loadDanhMuc();
+            await loadNguoiNhapList();
             if(currentUserProfile.role !== 'viewer') {
                 // Khởi tạo các thứ cho tab input
             }
@@ -716,6 +730,31 @@
                     if(editTb) editTb.innerHTML = tbOptions;
                 }
             } catch (error) { console.error(error); }
+        }
+
+        async function loadNguoiNhapList() {
+            try {
+                // Truy vấn bảng profiles để lấy những người có role là 'user'
+                const { data: users, error } = await supabaseClient
+                    .from('profiles')
+                    .select('full_name')
+                    .eq('role', 'user')
+                    .order('full_name');
+
+                if (users && !error) {
+                    const filterEl = document.getElementById('filterNguoiNhap');
+                    // Lọc bỏ các full_name bị rỗng/null, sau đó loại bỏ trùng lặp
+                    const uniqueNames = [...new Set(users.map(u => u.full_name).filter(Boolean))];
+                    
+                    let options = `<option value="ALL">Tất cả</option>`;
+                    uniqueNames.forEach(name => {
+                        options += `<option value="${name}">${name}</option>`;
+                    });
+                    if(filterEl) filterEl.innerHTML = options;
+                }
+            } catch (err) {
+                console.error("Lỗi tải danh sách người nhập:", err);
+            }
         }
 
         // --- Saving Data ---
@@ -772,6 +811,8 @@
         function refreshHistory() {
             document.getElementById('filterTuyen').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
+            document.getElementById('filterNguoiNhap').value = 'ALL'; // Reset Người Nhập
+            document.getElementById('sortBy').value = 'TIME_DESC'; // Reset Sắp xếp về mặc định
             document.getElementById('searchInput').value = '';
             loadHistory();
         }
@@ -822,6 +863,9 @@
         function filterTableLocal() {
             const term = document.getElementById('searchInput').value.toLowerCase();
             const statusFilter = document.getElementById('filterStatus').value;
+            const filterNguoiNhap = document.getElementById('filterNguoiNhap').value; // Lấy giá trị bộ lọc Người Nhập
+            const sortBy = document.getElementById('sortBy').value; // Lấy giá trị bộ lọc Sắp Xếp
+
             let filtered = allHistoryData;
             
             // 1. Lọc theo từ khóa tìm kiếm
@@ -842,6 +886,26 @@
                     return true;
                 });
             }
+
+            // 3. Lọc theo Người nhập
+            if (filterNguoiNhap !== 'ALL') {
+                filtered = filtered.filter(item => item.nguoi_nhap === filterNguoiNhap);
+            }
+
+            // 4. Sắp xếp (Theo thời gian nhập hoặc ngày biến động)
+            filtered.sort((a, b) => {
+                if (sortBy === 'DATE_DESC') {
+                    // Sắp xếp theo Cột "Ngày BĐ" (mới nhất -> cũ nhất)
+                    const dateA = new Date(a.ngay_bien_dong || 0);
+                    const dateB = new Date(b.ngay_bien_dong || 0);
+                    return dateB - dateA;
+                } else {
+                    // Sắp xếp theo "Thời gian nhập" (mặc định TIME_DESC, mới nhất -> cũ nhất)
+                    const timeA = new Date(a.thoi_gian_nhap || a.created_at || 0);
+                    const timeB = new Date(b.thoi_gian_nhap || b.created_at || 0);
+                    return timeB - timeA;
+                }
+            });
             
             renderHistoryTable(filtered);
         }
@@ -1178,6 +1242,23 @@
                     nguyen_nhan: document.getElementById('edit_nguyen_nhan').value,
                     don_vi_thuc_hien: document.getElementById('edit_don_vi_thuc_hien').value,
                     ghi_chu: document.getElementById('edit_ghi_chu').value,
+
+                    // BỔ SUNG: Tự động reset toàn bộ tiến độ (xóa check) khi Admin chỉnh sửa
+                    chk_pmis: false,
+                    chk_pmis_user: null,
+                    chk_pmis_time: null,
+                    
+                    chk_oms: false,
+                    chk_oms_user: null,
+                    chk_oms_time: null,
+                    
+                    chk_cmis: false,
+                    chk_cmis_user: null,
+                    chk_cmis_time: null,
+                    
+                    chk_autocad: false,
+                    chk_autocad_user: null,
+                    chk_autocad_time: null
                 };
 
                 const { error } = await supabaseClient
