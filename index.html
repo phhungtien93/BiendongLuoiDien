@@ -1,557 +1,557 @@
-!DOCTYPE html
-html lang=vi
-head
-    meta charset=UTF-8
-    meta name=viewport content=width=device-width, initial-scale=1.0
-    titleNhật Ký Biến Động Lưới Điện ver 1.1.3title
-    !-- Tailwind CSS --
-    script src=httpscdn.tailwindcss.comscript
-    !-- Supabase JS --
-    script src=httpscdn.jsdelivr.netnpm@supabasesupabase-js@2script
-    !-- Font Awesome Icons --
-    link rel=stylesheet href=httpscdnjs.cloudflare.comajaxlibsfont-awesome6.4.0cssall.min.css
-    !-- Google Fonts --
-    link href=httpsfonts.googleapis.comcss2family=Interwght@300;400;500;600;700&display=swap rel=stylesheet
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nhật Ký Biến Động Lưới Điện ver 1.1.3</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    style
-        body { font-family 'Inter', sans-serif; background-color #f1f5f9; }
-        .hidden { display none !important; }
-        .fade-in { animation fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity 0; transform translateY(10px); } to { opacity 1; transform translateY(0); } }
-         Custom Scrollbar 
-        -webkit-scrollbar { width 6px; height 6px; }
-        -webkit-scrollbar-track { background #f1f5f9; }
-        -webkit-scrollbar-thumb { background #cbd5e1; border-radius 3px; }
-        -webkit-scrollbar-thumbhover { background #94a3b8; }
-    style
-head
-body class=text-slate-800
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-800">
 
-    !-- ================== CONFIGURATION ================== --
-    script
-         ⚠️ THAY THẾ THÔNG TIN SUPABASE CỦA BẠN VÀO ĐÂY
-        const SUPABASE_URL = 'httpsvmckmoqufithprrlnvco.supabase.co';
+    <!-- ================== CONFIGURATION ================== -->
+    <script>
+        // ⚠️ THAY THẾ THÔNG TIN SUPABASE CỦA BẠN VÀO ĐÂY
+        const SUPABASE_URL = 'https://vmckmoqufithprrlnvco.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZtY2ttb3F1Zml0aHBycmxudmNvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA5MzA2MzAsImV4cCI6MjA4NjUwNjYzMH0.V8byqWACupN1fsJtlgO8pTwwPydDi-_lFEZNC5r0AV0';
-    script
+    </script>
 
-    !-- ================== AUTH SCREEN ================== --
-    div id=authScreen class=fixed inset-0 bg-slate-100 flex items-center justify-center z-50 p-4
-        div class=bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-200
-            div class=flex justify-center mb-6 text-blue-600
-                i class=fa-solid fa-bolt text-5xli
-            div
-            h2 class=text-2xl font-bold text-center text-slate-800 mb-2Biến Động Lưới Điệnh2
-            p class=text-center text-slate-500 mb-6 text-smĐăng nhập để tiếp tụcp
+    <!-- ================== AUTH SCREEN ================== -->
+    <div id="authScreen" class="fixed inset-0 bg-slate-100 flex items-center justify-center z-50 p-4">
+        <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md border border-slate-200">
+            <div class="flex justify-center mb-6 text-blue-600">
+                <i class="fa-solid fa-bolt text-5xl"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-center text-slate-800 mb-2">Biến Động Lưới Điện</h2>
+            <p class="text-center text-slate-500 mb-6 text-sm">Đăng nhập để tiếp tục</p>
             
-            !-- Login Form --
-            form id=loginForm class=space-y-4
-                div
-                    label class=block text-xs font-bold text-slate-500 uppercase mb-1Emaillabel
-                    div class=relative
-                        i class=fa-solid fa-envelope absolute left-3 top-3.5 text-slate-400i
-                        input type=email id=email required placeholder=email 
-                            class=w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none transition-all
-                    div
-                div
-                div
-                    label class=block text-xs font-bold text-slate-500 uppercase mb-1Mật khẩulabel
-                    div class=relative
-                        i class=fa-solid fa-lock absolute left-3 top-3.5 text-slate-400i
-                        input type=password id=password required placeholder=•••••••• 
-                            class=w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none transition-all
-                    div
-                div
-                button type=submit id=btnLogin
-                    class=w-full bg-blue-600 hoverbg-blue-700 text-white font-bold py-3 rounded-lg shadow-md hovershadow-lg transition-all transform activescale-95
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3 top-3.5 text-slate-400"></i>
+                        <input type="email" id="email" required placeholder="email" 
+                            class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mật khẩu</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3 top-3.5 text-slate-400"></i>
+                        <input type="password" id="password" required placeholder="••••••••" 
+                            class="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all">
+                    </div>
+                </div>
+                <button type="submit" id="btnLogin"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-md hover:shadow-lg transition-all transform active:scale-95">
                     ĐĂNG NHẬP
-                button
-            form
+                </button>
+            </form>
 
-            div id=authMessage class=hidden mt-4 p-3 rounded-lg text-sm text-centerdiv
-        div
-    div
+            <div id="authMessage" class="hidden mt-4 p-3 rounded-lg text-sm text-center"></div>
+        </div>
+    </div>
 
-    !-- ================== MAIN APP ================== --
-    div id=appScreen class=hidden min-h-screen flex flex-col
+    <!-- ================== MAIN APP ================== -->
+    <div id="appScreen" class="hidden min-h-screen flex flex-col">
         
-        !-- Header --
-        header class=bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30
-            div class=max-w-7xl mx-auto px-4 smpx-6 h-16 flex items-center justify-between
-                div class=flex items-center gap-3
-                    div class=bg-blue-600 text-white p-2 rounded-lg
-                        i class=fa-solid fa-bolti
-                    div
-                    div
-                        h1 class=text-lg font-bold text-blue-600 leading-tight uppercaseBIẾN ĐỘNG LƯỚI ĐIỆNh1
-                        p class=text-xs text-black font-normal mt-0.5Điện lực Châu Phú - Tổ Kỹ thuậtp
-                    div
-                div
-                div class=flex items-center gap-2 smgap-4
-                    div class=text-right
-                        p id=displayUsername class=text-xs smtext-sm font-bold text-slate-700 truncate max-w-[120px] smmax-w-[200px]Đang tải...p
-                        p id=displayRole class=text-[10px] text-green-600 font-semibold uppercase tracking-wider mt-0.5i class=fa-solid fa-circle text-[8px]i Đang trựcp
-                    div
-                    button onclick=openChangePasswordModal() class=p-2 text-slate-400 hovertext-blue-500 hoverbg-blue-50 rounded-full transition-colors title=Đổi mật khẩu
-                        i class=fa-solid fa-key text-xli
-                    button
-                    button onclick=logout() class=p-2 text-slate-400 hovertext-red-500 hoverbg-red-50 rounded-full transition-colors title=Đăng xuất
-                        i class=fa-solid fa-right-from-bracket text-xli
-                    button
-                div
-            div
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="bg-blue-600 text-white p-2 rounded-lg">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold text-blue-600 leading-tight uppercase">BIẾN ĐỘNG LƯỚI ĐIỆN</h1>
+                        <p class="text-xs text-black font-normal mt-0.5">Điện lực Châu Phú - Tổ Kỹ thuật</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 sm:gap-4">
+                    <div class="text-right">
+                        <p id="displayUsername" class="text-xs sm:text-sm font-bold text-slate-700 truncate max-w-[120px] sm:max-w-[200px]">Đang tải...</p>
+                        <p id="displayRole" class="text-[10px] text-green-600 font-semibold uppercase tracking-wider mt-0.5"><i class="fa-solid fa-circle text-[8px]"></i> Đang trực</p>
+                    </div>
+                    <button onclick="openChangePasswordModal()" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 rounded-full transition-colors" title="Đổi mật khẩu">
+                        <i class="fa-solid fa-key text-xl"></i>
+                    </button>
+                    <button onclick="logout()" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors" title="Đăng xuất">
+                        <i class="fa-solid fa-right-from-bracket text-xl"></i>
+                    </button>
+                </div>
+            </div>
 
-            !-- Navigation Tabs --
-            div class=max-w-7xl mx-auto px-4 smpx-6 flex space-x-1 overflow-x-auto
-                button onclick=switchTab('input') id=tabInput class=py-3 px-4 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 transition-colors flex items-center gap-2
-                    i class=fa-solid fa-pen-to-squarei Nhập Biến Động
-                button
-                button onclick=switchTab('history') id=tabHistory class=py-3 px-4 text-sm font-semibold border-b-2 border-transparent text-slate-500 hovertext-slate-700 transition-colors flex items-center gap-2
-                    i class=fa-solid fa-clock-rotate-lefti Lịch Sử Biến Động
-                button
-                !-- Admin Tab (Hidden by default) --
-                button onclick=switchTab('admin') id=tabAdmin class=hidden py-3 px-4 text-sm font-semibold border-b-2 border-transparent text-slate-500 hovertext-slate-700 transition-colors flex items-center gap-2
-                    i class=fa-solid fa-users-geari Quản Trị Hệ Thống
-                button
-            div
-        header
+            <!-- Navigation Tabs -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 flex space-x-1 overflow-x-auto">
+                <button onclick="switchTab('input')" id="tabInput" class="py-3 px-4 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square"></i> Nhập Biến Động
+                </button>
+                <button onclick="switchTab('history')" id="tabHistory" class="py-3 px-4 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left"></i> Lịch Sử Biến Động
+                </button>
+                <!-- Admin Tab (Hidden by default) -->
+                <button onclick="switchTab('admin')" id="tabAdmin" class="hidden py-3 px-4 text-sm font-semibold border-b-2 border-transparent text-slate-500 hover:text-slate-700 transition-colors flex items-center gap-2">
+                    <i class="fa-solid fa-users-gear"></i> Quản Trị Hệ Thống
+                </button>
+            </div>
+        </header>
 
-        !-- Main Content --
-        main class=max-w-7xl w-full mx-auto px-4 smpx-6 py-6 flex-grow
+        <!-- Main Content -->
+        <main class="max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex-grow">
             
-            !-- Notification Toast --
-            div id=toast class=fixed top-20 right-4 hidden bg-white border-l-4 p-4 rounded shadow-lg z-50 flex items-center gap-3 animate-bounce
-                div id=toastIcondiv
-                div
-                    h4 id=toastTitle class=font-bold text-smh4
-                    p id=toastMessage class=text-xs text-slate-600p
-                div
-            div
+            <!-- Notification Toast -->
+            <div id="toast" class="fixed top-20 right-4 hidden bg-white border-l-4 p-4 rounded shadow-lg z-50 flex items-center gap-3 animate-bounce">
+                <div id="toastIcon"></div>
+                <div>
+                    <h4 id="toastTitle" class="font-bold text-sm"></h4>
+                    <p id="toastMessage" class="text-xs text-slate-600"></p>
+                </div>
+            </div>
 
-            !-- TAB 1 INPUT FORM --
-            div id=contentInput class=fade-in space-y-6
-                !-- Card Form --
-                div class=bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between
-                        h2 class=font-bold text-slate-800 flex items-center gap-2
-                            i class=fa-solid fa-circle-plus text-blue-600i
+            <!-- TAB 1: INPUT FORM -->
+            <div id="contentInput" class="fade-in space-y-6">
+                <!-- Card Form -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h2 class="font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-plus text-blue-600"></i>
                             Thông Tin Biến Động
-                        h2
-                    div
-                    form id=bienDongForm class=p-6
-                        div class=grid grid-cols-1 mdgrid-cols-2 lggrid-cols-4 gap-6
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Ngày biến độnglabelinput type=date id=ngay_bien_dong required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Phát tuyếnlabelselect id=tuyen required class=w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 focusring-2 focusring-blue-500 outline-none font-bold text-blue-700 text-smoption value=Đang tải...optionselectdiv
-                            div class=lgcol-span-2label class=block text-xs font-bold text-slate-500 uppercase mb-1Vị trí trụlabeldiv class=relativei class=fa-solid fa-location-dot absolute left-3 top-3 text-slate-400 text-xsiinput type=text id=vi_tri_tru required placeholder=VD 4512 class=w-full pl-8 p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddivdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Thiết bịlabelselect id=thiet_bi required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value=Đang tải...optionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Trạng tháilabelselect id=trang_thai required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value= disabled selected hidden-- Chọn --optionoption value=Đóng class=text-red-600 font-boldĐóngoptionoption value=Mở class=text-green-600 font-boldMởoptionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Phalabelselect id=pha required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value= disabled selected hidden-- Chọn --optionoption value=Chưa đấu phaChưa đấu phaoptionoption value=ABCABCoptionoption value=AAoptionoption value=BBoptionoption value=CCoptionoption value=ABABoptionoption value=BCBCoptionoption value=CACAoptionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Tài sảnlabelselect id=tai_san required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value= disabled selected hidden-- Chọn --optionoption value=ĐLĐiện lực (ĐL)optionoption value=KH class=text-blue-600 font-boldKhách hàng (KH)optionoption value=ĐN class=text-red-600 font-boldĐiện nước (ĐN)optionselectdiv
-                            div class=lgcol-span-3label class=block text-xs font-bold text-slate-500 uppercase mb-1Nguyên nhân  Nội dung biến độnglabelinput type=text id=nguyen_nhan required placeholder=VD Lắp mới TBA Nguyễn Văn A 1x50kVA... class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Đơn vị thực hiệnlabelinput type=text id=don_vi_thuc_hien placeholder=VD Đội QLVH class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                            div class=lgcol-span-4label class=block text-xs font-bold text-slate-500 uppercase mb-1Ghi chú thêmlabelinput type=text id=ghi_chu class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                        div
-                        div class=mt-8 flex flex-col smflex-row gap-3
-                            button type=submit id=btnSave class=flex-1 bg-blue-600 hoverbg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow hovershadow-lg transition-all flex justify-center items-center gap-2i class=fa-solid fa-floppy-diski LƯU BIẾN ĐỘNGbutton
-                        div
-                    form
-                div
-                !-- Recent History (Session) --
-                div class=bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between
-                        h3 class=font-bold text-slate-700 text-sm flex items-center gap-2i class=fa-solid fa-clock-rotate-lefti Vừa nhập trong phiênh3
-                        span id=sessionCount class=bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full0span
-                    div
-                    div class=overflow-x-auto
-                        table class=w-full text-sm text-left
-                            thead class=text-xs text-slate-500 uppercase bg-slate-50 border-b
-                                tr
-                                    th class=px-4 py-3 whitespace-nowrapGiờ nhậpth
-                                    th class=px-4 py-3 whitespace-nowrapVị tríth
-                                    th class=px-4 py-3 whitespace-nowrapTB  Pha  TSth
-                                    th class=px-4 py-3 whitespace-nowrapNội dung  Ghi chúth
-                                    th class=px-4 py-3 whitespace-nowrapĐơn vị THth
-                                    th class=px-4 py-3 text-center whitespace-nowrapTrạng tháith
-                                tr
-                            thead
-                            tbody id=sessionTableBody
-                                trtd colspan=6 class=px-6 py-4 text-center text-slate-400 italicChưa có dữ liệu mới nàotdtr
-                            tbody
-                        table
-                    div
-                div
-            div
+                        </h2>
+                    </div>
+                    <form id="bienDongForm" class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ngày biến động</label><input type="date" id="ngay_bien_dong" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Phát tuyến</label><select id="tuyen" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700 text-sm"><option value="">Đang tải...</option></select></div>
+                            <div class="lg:col-span-2"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Vị trí trụ</label><div class="relative"><i class="fa-solid fa-location-dot absolute left-3 top-3 text-slate-400 text-xs"></i><input type="text" id="vi_tri_tru" required placeholder="VD: 45/12" class="w-full pl-8 p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Thiết bị</label><select id="thiet_bi" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="">Đang tải...</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Trạng thái</label><select id="trang_thai" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="" disabled selected hidden>-- Chọn --</option><option value="Đóng" class="text-red-600 font-bold">Đóng</option><option value="Mở" class="text-green-600 font-bold">Mở</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Pha</label><select id="pha" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="" disabled selected hidden>-- Chọn --</option><option value="Chưa đấu pha">Chưa đấu pha</option><option value="ABC">ABC</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="AB">AB</option><option value="BC">BC</option><option value="CA">CA</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tài sản</label><select id="tai_san" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="" disabled selected hidden>-- Chọn --</option><option value="ĐL">Điện lực (ĐL)</option><option value="KH" class="text-blue-600 font-bold">Khách hàng (KH)</option><option value="ĐN" class="text-red-600 font-bold">Điện nước (ĐN)</option></select></div>
+                            <div class="lg:col-span-3"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nguyên nhân / Nội dung biến động</label><input type="text" id="nguyen_nhan" required placeholder="VD: Lắp mới TBA Nguyễn Văn A 1x50kVA..." class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Đơn vị thực hiện</label><input type="text" id="don_vi_thuc_hien" placeholder="VD: Đội QLVH" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                            <div class="lg:col-span-4"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ghi chú thêm</label><input type="text" id="ghi_chu" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                        </div>
+                        <div class="mt-8 flex flex-col sm:flex-row gap-3">
+                            <button type="submit" id="btnSave" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow hover:shadow-lg transition-all flex justify-center items-center gap-2"><i class="fa-solid fa-floppy-disk"></i> LƯU BIẾN ĐỘNG</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- Recent History (Session) -->
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-700 text-sm flex items-center gap-2"><i class="fa-solid fa-clock-rotate-left"></i> Vừa nhập trong phiên</h3>
+                        <span id="sessionCount" class="bg-blue-100 text-blue-800 text-xs font-bold px-2 py-0.5 rounded-full">0</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
+                                <tr>
+                                    <th class="px-4 py-3 whitespace-nowrap">Giờ nhập</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Vị trí</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">TB / Pha / TS</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Nội dung / Ghi chú</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Đơn vị TH</th>
+                                    <th class="px-4 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sessionTableBody">
+                                <tr><td colspan="6" class="px-6 py-4 text-center text-slate-400 italic">Chưa có dữ liệu mới nào</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-            !-- TAB 2 HISTORY TABLE --
-            div id=contentHistory class=hidden fade-in space-y-4
-                div class=bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col mdflex-row gap-4 justify-between items-end
-                    div class=flex flex-col smflex-row gap-4 w-full mdw-auto
-                        div
-                            label class=block text-xs font-bold text-slate-500 uppercase mb-1Lọc Tuyếnlabel
-                            select id=filterTuyen onchange=loadHistory() class=w-full mdw-40 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700
-                                option value=ALLTất cảoption
-                            select
-                        div
-                        div
-                            label class=block text-xs font-bold text-slate-500 uppercase mb-1Tiến độlabel
-                            select id=filterStatus onchange=handleSearch() class=w-full mdw-44 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700
-                                option value=ALLTất cảoption
-                                option value=MISSING_PMISChưa cập nhật PMISoption
-                                option value=MISSING_OMSChưa cập nhật OMSoption
-                                option value=MISSING_CMISChưa cập nhật CMISoption
-                                option value=MISSING_AUTOCADChưa cập nhật Autocadoption
-                            select
-                        div
-                        div class=flex-grow
-                            label class=block text-xs font-bold text-slate-500 uppercase mb-1Tìm kiếmlabel
-                            div class=relative
-                                i class=fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xsi
-                                input type=text id=searchInput oninput=handleSearch() placeholder=Tìm trụ, nội dung... class=w-full mdw-64 pl-8 p-2 border border-slate-300 rounded-lg text-sm
-                            div
-                        div
-                    div
-                    button onclick=refreshHistory() class=bg-slate-100 hoverbg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors
-                        i class=fa-solid fa-rotatei Làm mới
-                    button
-                div
-                div class=bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden
-                    div class=overflow-x-auto
-                        table class=w-full text-sm text-left
-                            thead class=text-xs text-slate-500 uppercase bg-slate-50 border-b
-                                tr
-                                    th class=px-4 py-3 whitespace-nowrapNgày BĐth
-                                    th class=px-4 py-3 whitespace-nowrapTuyến  Vị tríth
-                                    th class=px-4 py-3 whitespace-nowrapThiết bịth
-                                    th class=px-4 py-3 whitespace-nowrapNội dungth
-                                    th class=px-4 py-3 whitespace-nowrapĐơn vị THth
-                                    th class=px-4 py-3 whitespace-nowrapGhi chúth
-                                    th class=px-4 py-3 text-center whitespace-nowrapTrạng tháith
-                                    th class=px-4 py-3 whitespace-nowrapNgười nhậpth
-                                    th id=thAction class=px-4 py-3 whitespace-nowrap text-right hiddenThao tácth
-                                tr
-                            thead
-                            tbody id=historyTableBody class=divide-y divide-slate-100
-                                trtd colspan=9 class=p-8 text-centeri class=fa-solid fa-spinner fa-spin text-blue-500 text-2xlitdtr
-                            tbody
-                        table
-                    div
-                div
+            <!-- TAB 2: HISTORY TABLE -->
+            <div id="contentHistory" class="hidden fade-in space-y-4">
+                <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col md:flex-row gap-4 justify-between items-end">
+                    <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Lọc Tuyến</label>
+                            <select id="filterTuyen" onchange="loadHistory()" class="w-full md:w-40 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                                <option value="ALL">Tất cả</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tiến độ</label>
+                            <select id="filterStatus" onchange="handleSearch()" class="w-full md:w-44 p-2 border border-slate-300 rounded-lg text-sm bg-slate-50 font-semibold text-slate-700">
+                                <option value="ALL">Tất cả</option>
+                                <option value="MISSING_PMIS">Chưa cập nhật PMIS</option>
+                                <option value="MISSING_OMS">Chưa cập nhật OMS</option>
+                                <option value="MISSING_CMIS">Chưa cập nhật CMIS</option>
+                                <option value="MISSING_AUTOCAD">Chưa cập nhật Autocad</option>
+                            </select>
+                        </div>
+                        <div class="flex-grow">
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tìm kiếm</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Tìm trụ, nội dung..." class="w-full md:w-64 pl-8 p-2 border border-slate-300 rounded-lg text-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="refreshHistory()" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
+                        <i class="fa-solid fa-rotate"></i> Làm mới
+                    </button>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="text-xs text-slate-500 uppercase bg-slate-50 border-b">
+                                <tr>
+                                    <th class="px-4 py-3 whitespace-nowrap">Ngày BĐ</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Tuyến / Vị trí</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Thiết bị</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Nội dung</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Đơn vị TH</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Ghi chú</th>
+                                    <th class="px-4 py-3 text-center whitespace-nowrap">Trạng thái</th>
+                                    <th class="px-4 py-3 whitespace-nowrap">Người nhập</th>
+                                    <th id="thAction" class="px-4 py-3 whitespace-nowrap text-right hidden">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody" class="divide-y divide-slate-100">
+                                <tr><td colspan="9" class="p-8 text-center"><i class="fa-solid fa-spinner fa-spin text-blue-500 text-2xl"></i></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
                 
-                !-- Load More Button --
-                div id=loadMoreContainer class=hidden flex justify-center mt-4 mb-2
-                    button onclick=loadMoreHistory() class=bg-white border border-slate-300 hoverbg-slate-50 hovertext-blue-600 text-slate-600 px-6 py-2.5 rounded-full text-sm font-semibold shadow-sm transition-all flex items-center gap-2
-                        i class=fa-solid fa-angle-downi Xem thêm
-                    button
-                div
-            div
+                <!-- Load More Button -->
+                <div id="loadMoreContainer" class="hidden flex justify-center mt-4 mb-2">
+                    <button onclick="loadMoreHistory()" class="bg-white border border-slate-300 hover:bg-slate-50 hover:text-blue-600 text-slate-600 px-6 py-2.5 rounded-full text-sm font-semibold shadow-sm transition-all flex items-center gap-2">
+                        <i class="fa-solid fa-angle-down"></i> Xem thêm
+                    </button>
+                </div>
+            </div>
 
-            !-- TAB 3 ADMIN PANEL --
-            div id=contentAdmin class=hidden fade-in space-y-6
+            <!-- TAB 3: ADMIN PANEL -->
+            <div id="contentAdmin" class="hidden fade-in space-y-6">
                 
-                !-- Admin Stats --
-                div class=grid grid-cols-2 mdgrid-cols-4 gap-4
-                    div class=bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4
-                        div class=bg-blue-100 p-3 rounded-lg text-blue-600i class=fa-solid fa-users text-xlidiv
-                        divp class=text-xs text-slate-500 font-bold uppercaseTổng tài khoảnph3 id=statTotal class=text-2xl font-bold text-slate-8000h3div
-                    div
-                    div class=bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4
-                        div class=bg-purple-100 p-3 rounded-lg text-purple-600i class=fa-solid fa-user-shield text-xlidiv
-                        divp class=text-xs text-slate-500 font-bold uppercaseAdminph3 id=statAdmin class=text-2xl font-bold text-slate-8000h3div
-                    div
-                    div class=bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4
-                        div class=bg-green-100 p-3 rounded-lg text-green-600i class=fa-solid fa-user-pen text-xlidiv
-                        divp class=text-xs text-slate-500 font-bold uppercaseUserph3 id=statUser class=text-2xl font-bold text-slate-8000h3div
-                    div
-                    div class=bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4
-                        div class=bg-slate-100 p-3 rounded-lg text-slate-600i class=fa-solid fa-user-clock text-xlidiv
-                        divp class=text-xs text-slate-500 font-bold uppercaseViewerph3 id=statViewer class=text-2xl font-bold text-slate-8000h3div
-                    div
-                div
+                <!-- Admin Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div class="bg-blue-100 p-3 rounded-lg text-blue-600"><i class="fa-solid fa-users text-xl"></i></div>
+                        <div><p class="text-xs text-slate-500 font-bold uppercase">Tổng tài khoản</p><h3 id="statTotal" class="text-2xl font-bold text-slate-800">0</h3></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div class="bg-purple-100 p-3 rounded-lg text-purple-600"><i class="fa-solid fa-user-shield text-xl"></i></div>
+                        <div><p class="text-xs text-slate-500 font-bold uppercase">Admin</p><h3 id="statAdmin" class="text-2xl font-bold text-slate-800">0</h3></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div class="bg-green-100 p-3 rounded-lg text-green-600"><i class="fa-solid fa-user-pen text-xl"></i></div>
+                        <div><p class="text-xs text-slate-500 font-bold uppercase">User</p><h3 id="statUser" class="text-2xl font-bold text-slate-800">0</h3></div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4">
+                        <div class="bg-slate-100 p-3 rounded-lg text-slate-600"><i class="fa-solid fa-user-clock text-xl"></i></div>
+                        <div><p class="text-xs text-slate-500 font-bold uppercase">Viewer</p><h3 id="statViewer" class="text-2xl font-bold text-slate-800">0</h3></div>
+                    </div>
+                </div>
 
-                div class=grid grid-cols-1 lggrid-cols-3 gap-6
-                    !-- Create User Form --
-                    div class=bg-white rounded-xl shadow-sm border border-slate-200 h-fit
-                        div class=bg-slate-50 px-6 py-4 border-b border-slate-200
-                            h3 class=font-bold text-slate-800i class=fa-solid fa-user-plus text-blue-600 mr-2iTạo Tài Khoản Mớih3
-                        div
-                        form id=adminCreateUserForm class=p-6 space-y-4
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Họ và Tênlabel
-                                input type=text id=newUserFullName required placeholder=Nguyễn Văn A class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                            div
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Email Đăng Nhậplabel
-                                input type=email id=newUserEmail required placeholder=email@dienluc.vn class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                            div
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Mật Khẩulabel
-                                input type=password id=newUserPassword required placeholder=Tối thiểu 6 ký tự minlength=6 class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                            div
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Phân Quyền (Role)label
-                                select id=newUserRole class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibold
-                                    option value=userUser (Được nhập liệu)option
-                                    option value=viewerViewer (Chỉ xem lịch sử)option
-                                    option value=adminAdmin (Toàn quyền)option
-                                select
-                            div
-                            button type=submit id=btnAdminCreate class=w-full bg-blue-600 hoverbg-blue-700 text-white font-bold py-3 rounded-lg shadow transition-all mt-4
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Create User Form -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit">
+                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200">
+                            <h3 class="font-bold text-slate-800"><i class="fa-solid fa-user-plus text-blue-600 mr-2"></i>Tạo Tài Khoản Mới</h3>
+                        </div>
+                        <form id="adminCreateUserForm" class="p-6 space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Họ và Tên</label>
+                                <input type="text" id="newUserFullName" required placeholder="Nguyễn Văn A" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Email Đăng Nhập</label>
+                                <input type="email" id="newUserEmail" required placeholder="email@dienluc.vn" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mật Khẩu</label>
+                                <input type="password" id="newUserPassword" required placeholder="Tối thiểu 6 ký tự" minlength="6" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Phân Quyền (Role)</label>
+                                <select id="newUserRole" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold">
+                                    <option value="user">User (Được nhập liệu)</option>
+                                    <option value="viewer">Viewer (Chỉ xem lịch sử)</option>
+                                    <option value="admin">Admin (Toàn quyền)</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="btnAdminCreate" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow transition-all mt-4">
                                 TẠO TÀI KHOẢN
-                            button
-                            p class=text-[10px] text-slate-400 text-center mt-2 italicTài khoản được tạo không cần phải xác thực email.p
-                        form
-                    div
+                            </button>
+                            <p class="text-[10px] text-slate-400 text-center mt-2 italic">*Tài khoản được tạo không cần phải xác thực email.</p>
+                        </form>
+                    </div>
 
-                    !-- User List Table --
-                    div class=lgcol-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col
-                        div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center
-                            h3 class=font-bold text-slate-800i class=fa-solid fa-list text-blue-600 mr-2iDanh Sách Tài Khoảnh3
-                            button onclick=loadAdminData() class=text-xs bg-slate-200 hoverbg-slate-300 text-slate-700 px-3 py-1.5 rounded transition-colorsi class=fa-solid fa-rotate mr-1i Làm mớibutton
-                        div
-                        div class=overflow-x-auto overflow-y-auto max-h-[500px]
-                            table class=w-full text-sm text-left
-                                thead class=text-xs text-slate-500 uppercase bg-white sticky top-0 border-b shadow-sm
-                                    tr
-                                        th class=px-6 py-3Họ và Tênth
-                                        th class=px-6 py-3Emailth
-                                        th class=px-6 py-3Quyền (Role)th
-                                        th class=px-6 py-3 text-rightHành độngth
-                                    tr
-                                thead
-                                tbody id=adminUsersTable class=divide-y divide-slate-100
-                                    trtd colspan=4 class=p-8 text-center text-slate-400Đang tải danh sách...tdtr
-                                tbody
-                            table
-                        div
-                    div
-                div
-            div
+                    <!-- User List Table -->
+                    <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+                        <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex justify-between items-center">
+                            <h3 class="font-bold text-slate-800"><i class="fa-solid fa-list text-blue-600 mr-2"></i>Danh Sách Tài Khoản</h3>
+                            <button onclick="loadAdminData()" class="text-xs bg-slate-200 hover:bg-slate-300 text-slate-700 px-3 py-1.5 rounded transition-colors"><i class="fa-solid fa-rotate mr-1"></i> Làm mới</button>
+                        </div>
+                        <div class="overflow-x-auto overflow-y-auto max-h-[500px]">
+                            <table class="w-full text-sm text-left">
+                                <thead class="text-xs text-slate-500 uppercase bg-white sticky top-0 border-b shadow-sm">
+                                    <tr>
+                                        <th class="px-6 py-3">Họ và Tên</th>
+                                        <th class="px-6 py-3">Email</th>
+                                        <th class="px-6 py-3">Quyền (Role)</th>
+                                        <th class="px-6 py-3 text-right">Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="adminUsersTable" class="divide-y divide-slate-100">
+                                    <tr><td colspan="4" class="p-8 text-center text-slate-400">Đang tải danh sách...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            !-- ================== CHANGE ROLE MODAL ================== --
-            div id=changeRoleModal class=fixed inset-0 bg-slate-90050 flex items-center justify-center z-50 p-4 hidden
-                div class=bg-white rounded-xl shadow-xl w-full max-w-sm fade-in
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between
-                        h3 class=font-bold text-slate-800i class=fa-solid fa-user-shield text-blue-600 mr-2i Đổi Quyền Tài Khoảnh3
-                        button onclick=closeChangeRoleModal() class=text-slate-400 hovertext-red-500 transition-colorsi class=fa-solid fa-xmark text-xlibutton
-                    div
-                    form id=changeRoleForm class=p-6
-                        input type=hidden id=changeRoleUserId
-                        p class=text-sm text-slate-600 mb-4Tài khoản strong id=changeRoleUserName class=text-slate-800strongp
-                        div
-                            label class=block text-xs font-bold text-slate-500 uppercase mb-1Cấp quyền mớilabel
-                            select id=changeRoleSelect class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibold
-                                option value=userUser (Được nhập liệu)option
-                                option value=viewerViewer (Chỉ xem lịch sử)option
-                                option value=adminAdmin (Toàn quyền)option
-                            select
-                        div
-                        div class=mt-6 flex justify-end gap-3
-                            button type=button onclick=closeChangeRoleModal() class=px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hoverbg-slate-50 font-semibold transition-colors text-smHủybutton
-                            button type=submit id=btnUpdateRole class=bg-blue-600 hoverbg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2i class=fa-solid fa-checki CẬP NHẬTbutton
-                        div
-                    form
-                div
-            div
+            <!-- ================== CHANGE ROLE MODAL ================== -->
+            <div id="changeRoleModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-sm fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-user-shield text-blue-600 mr-2"></i> Đổi Quyền Tài Khoản</h3>
+                        <button onclick="closeChangeRoleModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <form id="changeRoleForm" class="p-6">
+                        <input type="hidden" id="changeRoleUserId">
+                        <p class="text-sm text-slate-600 mb-4">Tài khoản: <strong id="changeRoleUserName" class="text-slate-800"></strong></p>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Cấp quyền mới</label>
+                            <select id="changeRoleSelect" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold">
+                                <option value="user">User (Được nhập liệu)</option>
+                                <option value="viewer">Viewer (Chỉ xem lịch sử)</option>
+                                <option value="admin">Admin (Toàn quyền)</option>
+                            </select>
+                        </div>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" onclick="closeChangeRoleModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors text-sm">Hủy</button>
+                            <button type="submit" id="btnUpdateRole" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-check"></i> CẬP NHẬT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-            !-- ================== EDIT MODAL ================== --
-            div id=editModal class=fixed inset-0 bg-slate-90050 flex items-center justify-center z-50 p-4 hidden
-                div class=bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col fade-in
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10
-                        h3 class=font-bold text-slate-800i class=fa-solid fa-pen text-blue-600 mr-2i Chỉnh Sửa Biến Độngh3
-                        button onclick=closeEditModal() class=text-slate-400 hovertext-red-500 transition-colorsi class=fa-solid fa-xmark text-xlibutton
-                    div
-                    form id=editBienDongForm class=p-6
-                        div class=grid grid-cols-1 mdgrid-cols-2 lggrid-cols-4 gap-6
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Ngày biến độnglabelinput type=date id=edit_ngay_bien_dong required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Phát tuyếnlabelselect id=edit_tuyen required class=w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 focusring-2 focusring-blue-500 outline-none font-bold text-blue-700 text-smoption value=Đang tải...optionselectdiv
-                            div class=lgcol-span-2label class=block text-xs font-bold text-slate-500 uppercase mb-1Vị trí trụlabeldiv class=relativei class=fa-solid fa-location-dot absolute left-3 top-3 text-slate-400 text-xsiinput type=text id=edit_vi_tri_tru required class=w-full pl-8 p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddivdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Thiết bịlabelselect id=edit_thiet_bi class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value=Đang tải...optionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Trạng tháilabelselect id=edit_trang_thai class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value=Đóng class=text-red-600 font-boldĐóngoptionoption value=Mở class=text-green-600 font-boldMởoptionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Phalabelselect id=edit_pha class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value=Chưa đấu phaChưa đấu phaoptionoption value=ABCABCoptionoption value=AAoptionoption value=BBoptionoption value=CCoptionoption value=ABABoptionoption value=BCBCoptionoption value=CACAoptionselectdiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Tài sảnlabelselect id=edit_tai_san class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none font-bold text-smoption value=ĐLĐiện lực (ĐL)optionoption value=KH class=text-blue-600 font-boldKhách hàng (KH)optionoption value=ĐN class=text-red-600 font-boldĐiện nước (ĐN)optionselectdiv
-                            div class=lgcol-span-3label class=block text-xs font-bold text-slate-500 uppercase mb-1Nguyên nhân  Nội dung biến độnglabelinput type=text id=edit_nguyen_nhan required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                            divlabel class=block text-xs font-bold text-slate-500 uppercase mb-1Đơn vị thực hiệnlabelinput type=text id=edit_don_vi_thuc_hien class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                            div class=lgcol-span-4label class=block text-xs font-bold text-slate-500 uppercase mb-1Ghi chú thêmlabelinput type=text id=edit_ghi_chu class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm font-semibolddiv
-                        div
-                        div class=mt-8 flex justify-end gap-3
-                            button type=button onclick=closeEditModal() class=px-6 py-2.5 rounded-lg border border-slate-300 text-slate-600 hoverbg-slate-50 font-semibold transition-colorsHủybutton
-                            button type=submit id=btnUpdate class=bg-blue-600 hoverbg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg shadow transition-colors flex items-center gap-2i class=fa-solid fa-checki CẬP NHẬTbutton
-                        div
-                    form
-                div
-            div
+            <!-- ================== EDIT MODAL ================== -->
+            <div id="editModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto flex flex-col fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-pen text-blue-600 mr-2"></i> Chỉnh Sửa Biến Động</h3>
+                        <button onclick="closeEditModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <form id="editBienDongForm" class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ngày biến động</label><input type="date" id="edit_ngay_bien_dong" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Phát tuyến</label><select id="edit_tuyen" required class="w-full p-2.5 border border-slate-300 rounded-lg bg-slate-50 focus:ring-2 focus:ring-blue-500 outline-none font-bold text-blue-700 text-sm"><option value="">Đang tải...</option></select></div>
+                            <div class="lg:col-span-2"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Vị trí trụ</label><div class="relative"><i class="fa-solid fa-location-dot absolute left-3 top-3 text-slate-400 text-xs"></i><input type="text" id="edit_vi_tri_tru" required class="w-full pl-8 p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Thiết bị</label><select id="edit_thiet_bi" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="">Đang tải...</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Trạng thái</label><select id="edit_trang_thai" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="Đóng" class="text-red-600 font-bold">Đóng</option><option value="Mở" class="text-green-600 font-bold">Mở</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Pha</label><select id="edit_pha" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="Chưa đấu pha">Chưa đấu pha</option><option value="ABC">ABC</option><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="AB">AB</option><option value="BC">BC</option><option value="CA">CA</option></select></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Tài sản</label><select id="edit_tai_san" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none font-bold text-sm"><option value="ĐL">Điện lực (ĐL)</option><option value="KH" class="text-blue-600 font-bold">Khách hàng (KH)</option><option value="ĐN" class="text-red-600 font-bold">Điện nước (ĐN)</option></select></div>
+                            <div class="lg:col-span-3"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Nguyên nhân / Nội dung biến động</label><input type="text" id="edit_nguyen_nhan" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                            <div><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Đơn vị thực hiện</label><input type="text" id="edit_don_vi_thuc_hien" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                            <div class="lg:col-span-4"><label class="block text-xs font-bold text-slate-500 uppercase mb-1">Ghi chú thêm</label><input type="text" id="edit_ghi_chu" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm font-semibold"></div>
+                        </div>
+                        <div class="mt-8 flex justify-end gap-3">
+                            <button type="button" onclick="closeEditModal()" class="px-6 py-2.5 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors">Hủy</button>
+                            <button type="submit" id="btnUpdate" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-6 rounded-lg shadow transition-colors flex items-center gap-2"><i class="fa-solid fa-check"></i> CẬP NHẬT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-            !-- ================== VIEW DETAILS MODAL ================== --
-            div id=viewModal class=fixed inset-0 bg-slate-90050 flex items-center justify-center z-50 p-4 hidden
-                div class=bg-white rounded-xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto flex flex-col fade-in
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10
-                        h3 class=font-bold text-slate-800i class=fa-solid fa-circle-info text-blue-600 mr-2i Chi Tiết Biến Độngh3
-                        button onclick=closeViewModal() class=text-slate-400 hovertext-red-500 transition-colorsi class=fa-solid fa-xmark text-xlibutton
-                    div
-                    div class=p-6
-                        div class=grid grid-cols-1 lggrid-cols-4 gap-8
-                            !-- Cột trái (Thông tin chi tiết) --
-                            div class=lgcol-span-3 space-y-4 text-sm text-slate-700 lgborder-r border-slate-100 lgpr-8
-                                div class=grid grid-cols-2 smgrid-cols-4 gap-4 border-b border-slate-100 pb-4
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Ngày biến độngpp id=view_ngay class=font-semibold text-slate-900 break-wordspdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Trạng tháipspan id=view_trang_thai class=px-2 py-1 rounded-full text-xs font-bold border inline-block break-wordsspandiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Phát tuyếnpp id=view_tuyen class=font-bold text-blue-600 break-wordspdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Vị trí trụpp id=view_vi_tri class=font-medium break-wordspdiv
-                                div
-                                div class=grid grid-cols-3 gap-4 border-b border-slate-100 pb-4
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Thiết bịpp id=view_thiet_bi class=font-medium bg-slate-100 inline-block px-2 py-0.5 rounded break-words max-w-fullpdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Phapp id=view_pha class=font-medium break-wordspdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Tài sảnpp id=view_tai_san class=font-medium break-wordspdiv
-                                div
-                                div class=border-b border-slate-100 pb-4 min-w-0
-                                    p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Nguyên nhân  Nội dung biến độngp
-                                    p id=view_noidung class=mt-1 bg-blue-5050 p-3 rounded-lg border border-blue-100 text-slate-800 leading-relaxed break-wordsp
-                                div
-                                div class=grid grid-cols-1 mdgrid-cols-2 gap-4 border-b border-slate-100 pb-4
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Đơn vị thực hiệnpp id=view_donvi class=font-medium break-wordspdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Ghi chú thêmpp id=view_ghichu class=italic text-slate-600 break-wordspdiv
-                                div
-                                div class=grid grid-cols-2 gap-4
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Người nhậppp id=view_nguoinhap class=font-semibold text-slate-800 break-wordspdiv
-                                    div class=min-w-0p class=text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1Thời gian nhậppp id=view_thoigian class=text-xs text-slate-500 break-wordspdiv
-                                div
-                            div
+            <!-- ================== VIEW DETAILS MODAL ================== -->
+            <div id="viewModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-y-auto flex flex-col fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between sticky top-0 z-10">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-circle-info text-blue-600 mr-2"></i> Chi Tiết Biến Động</h3>
+                        <button onclick="closeViewModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+                            <!-- Cột trái (Thông tin chi tiết) -->
+                            <div class="lg:col-span-3 space-y-4 text-sm text-slate-700 lg:border-r border-slate-100 lg:pr-8">
+                                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ngày biến động</p><p id="view_ngay" class="font-semibold text-slate-900 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Trạng thái</p><span id="view_trang_thai" class="px-2 py-1 rounded-full text-xs font-bold border inline-block break-words"></span></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Phát tuyến</p><p id="view_tuyen" class="font-bold text-blue-600 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vị trí trụ</p><p id="view_vi_tri" class="font-medium break-words"></p></div>
+                                </div>
+                                <div class="grid grid-cols-3 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thiết bị</p><p id="view_thiet_bi" class="font-medium bg-slate-100 inline-block px-2 py-0.5 rounded break-words max-w-full"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pha</p><p id="view_pha" class="font-medium break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tài sản</p><p id="view_tai_san" class="font-medium break-words"></p></div>
+                                </div>
+                                <div class="border-b border-slate-100 pb-4 min-w-0">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Nguyên nhân / Nội dung biến động</p>
+                                    <p id="view_noidung" class="mt-1 bg-blue-50/50 p-3 rounded-lg border border-blue-100 text-slate-800 leading-relaxed break-words"></p>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 border-b border-slate-100 pb-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Đơn vị thực hiện</p><p id="view_donvi" class="font-medium break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ghi chú thêm</p><p id="view_ghichu" class="italic text-slate-600 break-words"></p></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Người nhập</p><p id="view_nguoinhap" class="font-semibold text-slate-800 break-words"></p></div>
+                                    <div class="min-w-0"><p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thời gian nhập</p><p id="view_thoigian" class="text-xs text-slate-500 break-words"></p></div>
+                                </div>
+                            </div>
                             
-                            !-- Cột phải (Checklist) --
-                            div class=lgcol-span-1
-                                h4 class=text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4i class=fa-solid fa-list-check mr-2iTiến độ cập nhậth4
-                                div class=space-y-3
-                                    div class=bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden
-                                        label class=flex items-center gap-3 p-3 hoverbg-blue-50 cursor-pointer transition-colors duration-200
-                                            input type=checkbox id=chk_pmis onclick=handleCheck(event, 'chk_pmis') class=w-5 h-5 text-blue-600 rounded border-gray-300 focusring-blue-500
-                                            span class=text-sm font-semibold text-slate-700Cập nhật PMISspan
-                                        label
-                                        div id=info_chk_pmis class=px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-10050 mt-0.5
-                                            div class=flex items-center gap-1.5 mb-0.5i class=fa-solid fa-user-check text-green-600i span id=user_chk_pmis class=font-semibold text-slate-800spandiv
-                                            div class=flex items-center gap-1.5i class=fa-regular fa-clock text-slate-400i span id=time_chk_pmisspandiv
-                                        div
-                                    div
-                                    div class=bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden
-                                        label class=flex items-center gap-3 p-3 hoverbg-blue-50 cursor-pointer transition-colors duration-200
-                                            input type=checkbox id=chk_oms onclick=handleCheck(event, 'chk_oms') class=w-5 h-5 text-blue-600 rounded border-gray-300 focusring-blue-500
-                                            span class=text-sm font-semibold text-slate-700Cập nhật OMSspan
-                                        label
-                                        div id=info_chk_oms class=px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-10050 mt-0.5
-                                            div class=flex items-center gap-1.5 mb-0.5i class=fa-solid fa-user-check text-green-600i span id=user_chk_oms class=font-semibold text-slate-800spandiv
-                                            div class=flex items-center gap-1.5i class=fa-regular fa-clock text-slate-400i span id=time_chk_omsspandiv
-                                        div
-                                    div
-                                    div class=bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden
-                                        label class=flex items-center gap-3 p-3 hoverbg-blue-50 cursor-pointer transition-colors duration-200
-                                            input type=checkbox id=chk_cmis onclick=handleCheck(event, 'chk_cmis') class=w-5 h-5 text-blue-600 rounded border-gray-300 focusring-blue-500
-                                            span class=text-sm font-semibold text-slate-700Cập nhật CMISspan
-                                        label
-                                        div id=info_chk_cmis class=px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-10050 mt-0.5
-                                            div class=flex items-center gap-1.5 mb-0.5i class=fa-solid fa-user-check text-green-600i span id=user_chk_cmis class=font-semibold text-slate-800spandiv
-                                            div class=flex items-center gap-1.5i class=fa-regular fa-clock text-slate-400i span id=time_chk_cmisspandiv
-                                        div
-                                    div
-                                    div class=bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden
-                                        label class=flex items-center gap-3 p-3 hoverbg-blue-50 cursor-pointer transition-colors duration-200
-                                            input type=checkbox id=chk_autocad onclick=handleCheck(event, 'chk_autocad') class=w-5 h-5 text-blue-600 rounded border-gray-300 focusring-blue-500
-                                            span class=text-sm font-semibold text-slate-700Cập nhật Autocadspan
-                                        label
-                                        div id=info_chk_autocad class=px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-10050 mt-0.5
-                                            div class=flex items-center gap-1.5 mb-0.5i class=fa-solid fa-user-check text-green-600i span id=user_chk_autocad class=font-semibold text-slate-800spandiv
-                                            div class=flex items-center gap-1.5i class=fa-regular fa-clock text-slate-400i span id=time_chk_autocadspandiv
-                                        div
-                                    div
-                                div
-                            div
-                        div
-                    div
-                    div class=bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end mt-auto
-                        button onclick=closeViewModal() class=px-6 py-2.5 rounded-lg bg-slate-200 hoverbg-slate-300 text-slate-700 font-bold transition-colorsĐÓNGbutton
-                    div
-                div
-            div
+                            <!-- Cột phải (Checklist) -->
+                            <div class="lg:col-span-1">
+                                <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200 pb-2 mb-4"><i class="fa-solid fa-list-check mr-2"></i>Tiến độ cập nhật</h4>
+                                <div class="space-y-3">
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_pmis" onclick="handleCheck(event, 'chk_pmis')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật PMIS</span>
+                                        </label>
+                                        <div id="info_chk_pmis" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_pmis" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_pmis"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_oms" onclick="handleCheck(event, 'chk_oms')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật OMS</span>
+                                        </label>
+                                        <div id="info_chk_oms" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_oms" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_oms"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_cmis" onclick="handleCheck(event, 'chk_cmis')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật CMIS</span>
+                                        </label>
+                                        <div id="info_chk_cmis" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_cmis" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_cmis"></span></div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-slate-50 border border-slate-100 rounded-lg transition-all overflow-hidden">
+                                        <label class="flex items-center gap-3 p-3 hover:bg-blue-50 cursor-pointer transition-colors duration-200">
+                                            <input type="checkbox" id="chk_autocad" onclick="handleCheck(event, 'chk_autocad')" class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500">
+                                            <span class="text-sm font-semibold text-slate-700">Cập nhật Autocad</span>
+                                        </label>
+                                        <div id="info_chk_autocad" class="px-3 pb-3 pt-1 ml-8 text-[11px] text-slate-500 hidden border-t border-slate-100/50 mt-0.5">
+                                            <div class="flex items-center gap-1.5 mb-0.5"><i class="fa-solid fa-user-check text-green-600"></i> <span id="user_chk_autocad" class="font-semibold text-slate-800"></span></div>
+                                            <div class="flex items-center gap-1.5"><i class="fa-regular fa-clock text-slate-400"></i> <span id="time_chk_autocad"></span></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 px-6 py-4 border-t border-slate-200 flex justify-end mt-auto">
+                        <button onclick="closeViewModal()" class="px-6 py-2.5 rounded-lg bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold transition-colors">ĐÓNG</button>
+                    </div>
+                </div>
+            </div>
 
-            !-- ================== CONFIRM PASSWORD MODAL ================== --
-            div id=confirmPasswordModal class=fixed inset-0 bg-slate-90060 flex items-center justify-center z-[60] p-4 hidden
-                div class=bg-white rounded-xl shadow-xl w-full max-w-sm fade-in
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between
-                        h3 class=font-bold text-slate-800i class=fa-solid fa-shield-halved text-blue-600 mr-2i span id=confirmModalTitleTextXác thực tài khoảnspanh3
-                        button type=button onclick=closeConfirmPasswordModal() class=text-slate-400 hovertext-red-500 transition-colorsi class=fa-solid fa-xmark text-xlibutton
-                    div
-                    form id=confirmPasswordForm onsubmit=submitConfirmPassword(event) class=p-6
-                        p class=text-sm text-slate-600 mb-4Vui lòng nhập mật khẩu của bạn để xác nhận cập nhật trạng thái.p
-                        div
-                            label class=block text-xs font-bold text-slate-500 uppercase mb-1Mật khẩulabel
-                            input type=password id=confirmActionPassword required class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                        div
-                        div class=mt-6 flex justify-end gap-3
-                            button type=button onclick=closeConfirmPasswordModal() class=px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hoverbg-slate-50 font-semibold transition-colors text-smHủybutton
-                            button type=submit id=btnConfirmAction class=bg-blue-600 hoverbg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2i class=fa-solid fa-checki XÁC NHẬNbutton
-                        div
-                    form
-                div
-            div
+            <!-- ================== CONFIRM PASSWORD MODAL ================== -->
+            <div id="confirmPasswordModal" class="fixed inset-0 bg-slate-900/60 flex items-center justify-center z-[60] p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-sm fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-shield-halved text-blue-600 mr-2"></i> <span id="confirmModalTitleText">Xác thực tài khoản</span></h3>
+                        <button type="button" onclick="closeConfirmPasswordModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <form id="confirmPasswordForm" onsubmit="submitConfirmPassword(event)" class="p-6">
+                        <p class="text-sm text-slate-600 mb-4">Vui lòng nhập mật khẩu của bạn để xác nhận cập nhật trạng thái.</p>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mật khẩu</label>
+                            <input type="password" id="confirmActionPassword" required class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                        </div>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" onclick="closeConfirmPasswordModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors text-sm">Hủy</button>
+                            <button type="submit" id="btnConfirmAction" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-check"></i> XÁC NHẬN</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-            !-- ================== CHANGE PASSWORD MODAL ================== --
-            div id=changePasswordModal class=fixed inset-0 bg-slate-90050 flex items-center justify-center z-50 p-4 hidden
-                div class=bg-white rounded-xl shadow-xl w-full max-w-sm fade-in
-                    div class=bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between
-                        h3 class=font-bold text-slate-800i class=fa-solid fa-key text-blue-600 mr-2i Đổi Mật Khẩuh3
-                        button onclick=closeChangePasswordModal() class=text-slate-400 hovertext-red-500 transition-colorsi class=fa-solid fa-xmark text-xlibutton
-                    div
-                    form id=changePasswordForm class=p-6
-                        div class=space-y-4
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Mật khẩu mớilabel
-                                input type=password id=newPasswordInput required minlength=6 placeholder=Nhập mật khẩu mới class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                            div
-                            div
-                                label class=block text-xs font-bold text-slate-500 uppercase mb-1Xác nhận mật khẩu mớilabel
-                                input type=password id=confirmNewPasswordInput required minlength=6 placeholder=Nhập lại mật khẩu mới class=w-full p-2.5 border border-slate-300 rounded-lg focusring-2 focusring-blue-500 outline-none text-sm
-                            div
-                        div
-                        div class=mt-6 flex justify-end gap-3
-                            button type=button onclick=closeChangePasswordModal() class=px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hoverbg-slate-50 font-semibold transition-colors text-smHủybutton
-                            button type=submit id=btnUpdatePassword class=bg-blue-600 hoverbg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2i class=fa-solid fa-checki CẬP NHẬTbutton
-                        div
-                    form
-                div
-            div
+            <!-- ================== CHANGE PASSWORD MODAL ================== -->
+            <div id="changePasswordModal" class="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-50 p-4 hidden">
+                <div class="bg-white rounded-xl shadow-xl w-full max-w-sm fade-in">
+                    <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center justify-between">
+                        <h3 class="font-bold text-slate-800"><i class="fa-solid fa-key text-blue-600 mr-2"></i> Đổi Mật Khẩu</h3>
+                        <button onclick="closeChangePasswordModal()" class="text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-xmark text-xl"></i></button>
+                    </div>
+                    <form id="changePasswordForm" class="p-6">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Mật khẩu mới</label>
+                                <input type="password" id="newPasswordInput" required minlength="6" placeholder="Nhập mật khẩu mới" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 uppercase mb-1">Xác nhận mật khẩu mới</label>
+                                <input type="password" id="confirmNewPasswordInput" required minlength="6" placeholder="Nhập lại mật khẩu mới" class="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-sm">
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button type="button" onclick="closeChangePasswordModal()" class="px-4 py-2 rounded-lg border border-slate-300 text-slate-600 hover:bg-slate-50 font-semibold transition-colors text-sm">Hủy</button>
+                            <button type="submit" id="btnUpdatePassword" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow transition-colors text-sm flex items-center gap-2"><i class="fa-solid fa-check"></i> CẬP NHẬT</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
 
-        main
-    div
+        </main>
+    </div>
 
-    !-- ================== JAVASCRIPT LOGIC ================== --
-    script
-         1. SUPABASE INITIALIZATION
+    <!-- ================== JAVASCRIPT LOGIC ================== -->
+    <script>
+        // 1. SUPABASE INITIALIZATION
         let supabaseClient;
-         Instance riêng để Admin tạo user mà không làm văng session hiện tại (yêu cầu cấu hình Supabase phù hợp)
+        // Instance riêng để Admin tạo user mà không làm văng session hiện tại (yêu cầu cấu hình Supabase phù hợp)
         let adminAuthClient; 
 
         try {
             const { createClient } = window.supabase;
             supabaseClient = createClient(SUPABASE_URL, SUPABASE_KEY);
             
-             Client phụ không lưu session vào storage để dùng tạo tài khoản
+            // Client phụ không lưu session vào storage để dùng tạo tài khoản
             adminAuthClient = createClient(SUPABASE_URL, SUPABASE_KEY, {
-                auth { persistSession false, autoRefreshToken false }
+                auth: { persistSession: false, autoRefreshToken: false }
             });
         } catch (err) {
-            console.error(Supabase Init Error, err);
-            alert(Lỗi kết nối thư viện Supabase. Vui lòng kiểm tra mạng.);
+            console.error("Supabase Init Error:", err);
+            alert("Lỗi kết nối thư viện Supabase. Vui lòng kiểm tra mạng.");
         }
 
-         2. STATE VARIABLES
+        // 2. STATE VARIABLES
         let currentUser = null;
-        let currentUserProfile = null;  {id, email, full_name, role}
+        let currentUserProfile = null; // {id, email, full_name, role}
         let sessionData = [];
         let allHistoryData = [];
-        let currentDisplayLimit = 20;  Giới hạn số dòng hiển thị mặc định
+        let currentDisplayLimit = 20; // Giới hạn số dòng hiển thị mặc định
         
-        let currentViewRecordId = null;  Biến lưu ID bản ghi đang xem chi tiết
-        let targetCheckType = null;      Biến lưu loại checklist đang click (pmis, oms...)
-        let desiredCheckState = false;   Biến lưu trạng thái mong muốn (truefalse)
+        let currentViewRecordId = null; // Biến lưu ID bản ghi đang xem chi tiết
+        let targetCheckType = null;     // Biến lưu loại checklist đang click (pmis, oms...)
+        let desiredCheckState = false;  // Biến lưu trạng thái mong muốn (true/false)
 
-         3. DOM ELEMENTS
+        // 3. DOM ELEMENTS
         const authScreen = document.getElementById('authScreen');
         const appScreen = document.getElementById('appScreen');
         const loginForm = document.getElementById('loginForm');
@@ -562,7 +562,7 @@ body class=text-slate-800
         const changePasswordForm = document.getElementById('changePasswordForm');
         const authMessage = document.getElementById('authMessage');
         
-         4. EVENT LISTENERS
+        // 4. EVENT LISTENERS
         document.addEventListener('DOMContentLoaded', checkSession);
         loginForm.addEventListener('submit', handleLogin);
         bienDongForm.addEventListener('submit', handleSaveBienDong);
@@ -571,11 +571,11 @@ body class=text-slate-800
         if(changeRoleForm) changeRoleForm.addEventListener('submit', handleChangeRoleSubmit);
         if(changePasswordForm) changePasswordForm.addEventListener('submit', handleChangePasswordSubmit);
 
-         5. FUNCTIONS
+        // 5. FUNCTIONS
         
-         --- Auth Logic ---
+        // --- Auth Logic ---
         async function checkSession() {
-            const { data { session } } = await supabaseClient.auth.getSession();
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 await loadUserProfile(session.user);
             } else {
@@ -602,7 +602,7 @@ body class=text-slate-800
         }
 
         async function logout() {
-            if(confirm('Bạn có chắc muốn đăng xuất')) {
+            if(confirm('Bạn có chắc muốn đăng xuất?')) {
                 await supabaseClient.auth.signOut();
                 location.reload();
             }
@@ -611,29 +611,29 @@ body class=text-slate-800
         async function loadUserProfile(user) {
             currentUser = user;
             
-             Cố gắng lấy profile bao gồm role
+            // Cố gắng lấy profile bao gồm role
             const { data, error } = await supabaseClient
                 .from('profiles')
-                .select('')
+                .select('*')
                 .eq('id', user.id)
                 .single();
 
             if (data) {
                 currentUserProfile = data;
             } else {
-                 Mặc định nếu chưa có profile trong bảng
-                currentUserProfile = { id user.id, email user.email, full_name user.email, role 'user' };
+                // Mặc định nếu chưa có profile trong bảng
+                currentUserProfile = { id: user.id, email: user.email, full_name: user.email, role: 'user' };
             }
 
-             Hiển thị UI Header an toàn (tránh lỗi nếu role bị null)
-            const userRole = currentUserProfile.role  'user';
+            // Hiển thị UI Header an toàn (tránh lỗi nếu role bị null)
+            const userRole = currentUserProfile.role || 'user';
             const roleName = userRole.charAt(0).toUpperCase() + userRole.slice(1);
-            const fullName = currentUserProfile.full_name  currentUserProfile.email  'Tài khoản';
+            const fullName = currentUserProfile.full_name || currentUserProfile.email || 'Tài khoản';
             
             const displayStr = `${roleName} - ${fullName}`;
             document.getElementById('displayUsername').innerText = displayStr;
-            document.getElementById('displayUsername').title = displayStr;  Hiển thị đầy đủ khi rê chuột vào
-            document.getElementById('displayRole').innerHTML = `i class=fa-solid fa-circle text-[8px]i Đang trực`;
+            document.getElementById('displayUsername').title = displayStr; // Hiển thị đầy đủ khi rê chuột vào
+            document.getElementById('displayRole').innerHTML = `<i class="fa-solid fa-circle text-[8px]"></i> Đang trực`;
 
             applyRoleBasedUI(currentUserProfile.role);
             showAppScreen();
@@ -651,8 +651,8 @@ body class=text-slate-800
             } else if (role === 'viewer') {
                 tabAdmin.classList.add('hidden');
                 tabInput.classList.add('hidden');
-                switchTab('history');  Viewer chỉ được xem
-            } else {  'user'
+                switchTab('history'); // Viewer chỉ được xem
+            } else { // 'user'
                 tabAdmin.classList.add('hidden');
                 tabInput.classList.remove('hidden');
                 switchTab('input');
@@ -661,7 +661,7 @@ body class=text-slate-800
 
         function showAppScreen() {
             authScreen.classList.add('opacity-0', 'transition-opacity', 'duration-500');
-            setTimeout(() = {
+            setTimeout(() => {
                 authScreen.classList.add('hidden');
                 appScreen.classList.remove('hidden');
                 initAppData();
@@ -671,13 +671,13 @@ body class=text-slate-800
 
         function showAuthMessage(msg, type) {
             authMessage.innerText = msg;
-            authMessage.className = `mt-4 p-3 rounded-lg text-sm text-center ${type === 'error'  'bg-red-100 text-red-700'  'bg-green-100 text-green-700'}`;
+            authMessage.className = `mt-4 p-3 rounded-lg text-sm text-center ${type === 'error' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`;
             authMessage.classList.remove('hidden');
         }
 
         function setAuthLoading(btn, isLoading, originalText) {
             if(isLoading) {
-                btn.innerHTML = 'i class=fa-solid fa-spinner fa-spini';
+                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
                 btn.disabled = true;
             } else {
                 btn.innerHTML = originalText;
@@ -685,61 +685,61 @@ body class=text-slate-800
             }
         }
 
-         --- Data Loading ---
+        // --- Data Loading ---
         async function initAppData() {
             await loadDanhMuc();
             if(currentUserProfile.role !== 'viewer') {
-                 Khởi tạo các thứ cho tab input
+                // Khởi tạo các thứ cho tab input
             }
             loadHistory();
         }
 
         async function loadDanhMuc() {
             try {
-                const { data tuyenData } = await supabaseClient.from('dm_tuyen').select('ten_tuyen').order('ten_tuyen');
+                const { data: tuyenData } = await supabaseClient.from('dm_tuyen').select('ten_tuyen').order('ten_tuyen');
                 if(tuyenData) {
                     const selectTuyen = document.getElementById('tuyen');
                     const filterTuyen = document.getElementById('filterTuyen');
                     const editTuyen = document.getElementById('edit_tuyen');
-                    let options = `option value= disabled selected hidden-- Chọn tuyến --option` + tuyenData.map(t = `option value=${t.ten_tuyen}${t.ten_tuyen}option`).join('');
+                    let options = `<option value="" disabled selected hidden>-- Chọn tuyến --</option>` + tuyenData.map(t => `<option value="${t.ten_tuyen}">${t.ten_tuyen}</option>`).join('');
                     if(selectTuyen) selectTuyen.innerHTML = options;
-                    if(filterTuyen) filterTuyen.innerHTML = `option value=ALLTất cảoption` + tuyenData.map(t = `option value=${t.ten_tuyen}${t.ten_tuyen}option`).join('');
+                    if(filterTuyen) filterTuyen.innerHTML = `<option value="ALL">Tất cả</option>` + tuyenData.map(t => `<option value="${t.ten_tuyen}">${t.ten_tuyen}</option>`).join('');
                     if(editTuyen) editTuyen.innerHTML = options;
                 }
 
-                const { data tbData } = await supabaseClient.from('dm_thiet_bi').select('ten_thiet_bi');
+                const { data: tbData } = await supabaseClient.from('dm_thiet_bi').select('ten_thiet_bi');
                 if(tbData) {
                     const selectTb = document.getElementById('thiet_bi');
                     const editTb = document.getElementById('edit_thiet_bi');
-                    let tbOptions = `option value= disabled selected hidden-- Chọn thiết bị --option` + tbData.map(t = `option value=${t.ten_thiet_bi}${t.ten_thiet_bi}option`).join('');
+                    let tbOptions = `<option value="" disabled selected hidden>-- Chọn thiết bị --</option>` + tbData.map(t => `<option value="${t.ten_thiet_bi}">${t.ten_thiet_bi}</option>`).join('');
                     if(selectTb) selectTb.innerHTML = tbOptions;
                     if(editTb) editTb.innerHTML = tbOptions;
                 }
             } catch (error) { console.error(error); }
         }
 
-         --- Saving Data ---
+        // --- Saving Data ---
         async function handleSaveBienDong(e) {
             e.preventDefault();
             const btn = document.getElementById('btnSave');
             const originalText = btn.innerHTML;
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini Đang lưu...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`;
             btn.disabled = true;
 
             try {
                 const payload = {
-                    ngay_bien_dong document.getElementById('ngay_bien_dong').value,
-                    tuyen document.getElementById('tuyen').value,
-                    vi_tri_tru document.getElementById('vi_tri_tru').value,
-                    thiet_bi document.getElementById('thiet_bi').value,
-                    trang_thai document.getElementById('trang_thai').value,
-                    pha document.getElementById('pha').value,
-                    tai_san document.getElementById('tai_san').value,
-                    nguyen_nhan document.getElementById('nguyen_nhan').value,
-                    don_vi_thuc_hien document.getElementById('don_vi_thuc_hien').value,
-                    ghi_chu document.getElementById('ghi_chu').value,
-                    nguoi_nhap currentUserProfile.full_name,
-                    thoi_gian_nhap new Date().toISOString()
+                    ngay_bien_dong: document.getElementById('ngay_bien_dong').value,
+                    tuyen: document.getElementById('tuyen').value,
+                    vi_tri_tru: document.getElementById('vi_tri_tru').value,
+                    thiet_bi: document.getElementById('thiet_bi').value,
+                    trang_thai: document.getElementById('trang_thai').value,
+                    pha: document.getElementById('pha').value,
+                    tai_san: document.getElementById('tai_san').value,
+                    nguyen_nhan: document.getElementById('nguyen_nhan').value,
+                    don_vi_thuc_hien: document.getElementById('don_vi_thuc_hien').value,
+                    ghi_chu: document.getElementById('ghi_chu').value,
+                    nguoi_nhap: currentUserProfile.full_name,
+                    thoi_gian_nhap: new Date().toISOString()
                 };
 
                 const { error } = await supabaseClient.from('bien_dong_luoi_dien').insert([payload]);
@@ -748,7 +748,7 @@ body class=text-slate-800
                 showToast('Thành công', 'Đã lưu biến động vào hệ thống', 'success');
                 addToSessionTable(payload);
                 
-                 Reset Fields (Keep Date for convenience)
+                // Reset Fields (Keep Date for convenience)
                 document.getElementById('tuyen').value = '';
                 document.getElementById('vi_tri_tru').value = '';
                 document.getElementById('thiet_bi').value = '';
@@ -761,14 +761,14 @@ body class=text-slate-800
                 document.getElementById('tuyen').focus();
 
             } catch (error) {
-                showToast('Thất bại', 'Lỗi khi lưu dữ liệu ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi khi lưu dữ liệu: ' + error.message, 'error');
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         }
 
-         --- History & Tables ---
+        // --- History & Tables ---
         function refreshHistory() {
             document.getElementById('filterTuyen').value = 'ALL';
             document.getElementById('filterStatus').value = 'ALL';
@@ -781,10 +781,10 @@ body class=text-slate-800
             const loadMoreBtn = document.getElementById('loadMoreContainer');
             if(!tbody) return;
             
-            tbody.innerHTML = `trtd colspan=9 class=p-8 text-centeri class=fa-solid fa-spinner fa-spin text-blue-500 text-2xlitdtr`;
+            tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center"><i class="fa-solid fa-spinner fa-spin text-blue-500 text-2xl"></i></td></tr>`;
             if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
 
-             Kiểm tra quyền admin để hiển thị cột thao tác
+            // Kiểm tra quyền admin để hiển thị cột thao tác
             const thAction = document.getElementById('thAction');
             const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
             if (thAction) {
@@ -793,28 +793,28 @@ body class=text-slate-800
             }
 
             const filterTuyenVal = document.getElementById('filterTuyen').value;
-             Tải 500 dòng gần nhất để có sẵn dữ liệu khi bấm Xem thêm
-            let query = supabaseClient.from('bien_dong_luoi_dien').select('').order('created_at', { ascending false }).limit(500);
+            // Tải 500 dòng gần nhất để có sẵn dữ liệu khi bấm "Xem thêm"
+            let query = supabaseClient.from('bien_dong_luoi_dien').select('*').order('created_at', { ascending: false }).limit(500);
             if(filterTuyenVal !== 'ALL') query = query.eq('tuyen', filterTuyenVal);
 
             const { data, error } = await query;
             if (error) {
-                tbody.innerHTML = `trtd colspan=9 class=p-4 text-center text-red-500Lỗi tải dữ liệutdtr`;
+                tbody.innerHTML = `<tr><td colspan="9" class="p-4 text-center text-red-500">Lỗi tải dữ liệu</td></tr>`;
                 return;
             }
             allHistoryData = data;
-            currentDisplayLimit = 20;  Reset về 20 dòng mỗi khi tải mới
+            currentDisplayLimit = 20; // Reset về 20 dòng mỗi khi tải mới
             filterTableLocal();
         }
 
         function handleSearch() {
-             Khi người dùng gõ tìm kiếm, reset giới hạn hiển thị về 20
+            // Khi người dùng gõ tìm kiếm, reset giới hạn hiển thị về 20
             currentDisplayLimit = 20;
             filterTableLocal();
         }
 
         function loadMoreHistory() {
-             Tăng giới hạn lên 20 dòng mỗi khi bấm nút
+            // Tăng giới hạn lên 20 dòng mỗi khi bấm nút
             currentDisplayLimit += 20;
             filterTableLocal();
         }
@@ -824,17 +824,17 @@ body class=text-slate-800
             const statusFilter = document.getElementById('filterStatus').value;
             let filtered = allHistoryData;
             
-             1. Lọc theo từ khóa tìm kiếm
+            // 1. Lọc theo từ khóa tìm kiếm
             if (term) {
-                filtered = filtered.filter(item = 
-                    (item.vi_tri_tru && item.vi_tri_tru.toLowerCase().includes(term))  
+                filtered = filtered.filter(item => 
+                    (item.vi_tri_tru && item.vi_tri_tru.toLowerCase().includes(term)) || 
                     (item.nguyen_nhan && item.nguyen_nhan.toLowerCase().includes(term))
                 );
             }
 
-             2. Lọc theo trạng thái cập nhật (Tiến độ)
+            // 2. Lọc theo trạng thái cập nhật (Tiến độ)
             if (statusFilter !== 'ALL') {
-                filtered = filtered.filter(item = {
+                filtered = filtered.filter(item => {
                     if (statusFilter === 'MISSING_PMIS') return !item.chk_pmis;
                     if (statusFilter === 'MISSING_OMS') return !item.chk_oms;
                     if (statusFilter === 'MISSING_CMIS') return !item.chk_cmis;
@@ -852,61 +852,61 @@ body class=text-slate-800
             const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
 
             if(data.length === 0) {
-                tbody.innerHTML = `trtd colspan=${isAdmin  9  8} class=p-8 text-center text-slate-400Không có dữ liệu nào.tdtr`;
+                tbody.innerHTML = `<tr><td colspan="${isAdmin ? 9 : 8}" class="p-8 text-center text-slate-400">Không có dữ liệu nào.</td></tr>`;
                 if (loadMoreBtn) loadMoreBtn.classList.add('hidden');
                 return;
             }
 
-             Chỉ lấy dữ liệu theo giới hạn hiện tại
+            // Chỉ lấy dữ liệu theo giới hạn hiện tại
             const renderData = data.slice(0, currentDisplayLimit);
 
-            tbody.innerHTML = renderData.map(item = `
-                tr onclick=openViewModal('${item.id}') class=hoverbg-blue-50 transition-colors cursor-pointer group
-                    td class=px-4 py-3 font-medium text-slate-900 whitespace-nowrap
-                        div class=flex items-center gap-1.5i class=fa-regular fa-calendar text-slate-400i ${formatDate(item.ngay_bien_dong)}div
-                        div class=flex items-center gap-1 mt-1.5
-                            span class=${item.chk_pmis  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=PMISPspan
-                            span class=${item.chk_oms  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=OMSOspan
-                            span class=${item.chk_cmis  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=CMISCspan
-                            span class=${item.chk_autocad  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=AutocadAspan
-                        div
-                    td
-                    td class=px-4 py-3 max-w-[150px]
-                        div class=font-bold text-blue-600 truncate title=${item.tuyen}${item.tuyen}div
-                        div class=text-slate-500 text-xs truncate title=${item.vi_tri_tru}i class=fa-solid fa-location-dot text-[10px]i ${item.vi_tri_tru}div
-                    td
-                    td class=px-4 py-3 whitespace-nowrap
-                        span class=bg-slate-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded border border-slate-200${item.thiet_bi}span
-                        div class=text-[10px] text-slate-500 mt-1${item.pha} • span class=${item.tai_san === 'ĐL'  'text-black font-bold'  item.tai_san === 'KH'  'text-blue-600 font-bold'  item.tai_san === 'ĐN'  'text-red-600 font-bold'  ''}${item.tai_san}spandiv
-                    td
-                    td class=px-4 py-3 min-w-[250px] whitespace-normal break-words text-slate-700
+            tbody.innerHTML = renderData.map(item => `
+                <tr onclick="openViewModal('${item.id}')" class="hover:bg-blue-50 transition-colors cursor-pointer group">
+                    <td class="px-4 py-3 font-medium text-slate-900 whitespace-nowrap">
+                        <div class="flex items-center gap-1.5"><i class="fa-regular fa-calendar text-slate-400"></i> ${formatDate(item.ngay_bien_dong)}</div>
+                        <div class="flex items-center gap-1 mt-1.5">
+                            <span class="${item.chk_pmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="PMIS">P</span>
+                            <span class="${item.chk_oms ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="OMS">O</span>
+                            <span class="${item.chk_cmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="CMIS">C</span>
+                            <span class="${item.chk_autocad ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="Autocad">A</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 max-w-[150px]">
+                        <div class="font-bold text-blue-600 truncate" title="${item.tuyen}">${item.tuyen}</div>
+                        <div class="text-slate-500 text-xs truncate" title="${item.vi_tri_tru}"><i class="fa-solid fa-location-dot text-[10px]"></i> ${item.vi_tri_tru}</div>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <span class="bg-slate-100 text-slate-800 text-xs font-semibold px-2 py-0.5 rounded border border-slate-200">${item.thiet_bi}</span>
+                        <div class="text-[10px] text-slate-500 mt-1">${item.pha} • <span class="${item.tai_san === 'ĐL' ? 'text-black font-bold' : item.tai_san === 'KH' ? 'text-blue-600 font-bold' : item.tai_san === 'ĐN' ? 'text-red-600 font-bold' : ''}">${item.tai_san}</span></div>
+                    </td>
+                    <td class="px-4 py-3 min-w-[250px] whitespace-normal break-words text-slate-700">
                         ${item.nguyen_nhan}
-                    td
-                    td class=px-4 py-3 min-w-[120px] whitespace-normal break-words text-sm text-slate-600
-                        ${item.don_vi_thuc_hien  '-'}
-                    td
-                    td class=px-4 py-3 min-w-[180px] whitespace-normal break-words text-sm text-slate-500 italic
-                        ${item.ghi_chu  '-'}
-                    td
-                    td class=px-4 py-3 text-center whitespace-nowrap
-                        span class=text-xs font-bold px-2 py-1 rounded-full border ${item.trang_thai === 'Đóng'  'bg-red-50 text-red-700 border-red-100'  'bg-green-50 text-green-700 border-green-100'}${item.trang_thai}span
-                    td
-                    td class=px-4 py-3 whitespace-nowrap
-                        div class=flex flex-col
-                            span class=text-sm font-semibold text-slate-700 max-w-[100px] truncate title=${item.nguoi_nhap  'NA'}${item.nguoi_nhap  'NA'}span
-                            span class=text-[10px] text-slate-400${formatDateTime(item.thoi_gian_nhap)}span
-                        div
-                    td
-                    ${isAdmin  `td class=px-4 py-3 text-right whitespace-nowrap
-                        button onclick=openEditModal(event, '${item.id}') class=text-slate-400 hovertext-blue-600 hoverbg-white p-2 rounded shadow-sm opacity-0 group-hoveropacity-100 transition-all title=Chỉnh sửai class=fa-solid fa-pen-to-squareibutton
-                        button onclick=deleteBienDong(event, '${item.id}') class=text-slate-400 hovertext-red-600 hoverbg-white p-2 rounded shadow-sm opacity-0 group-hoveropacity-100 transition-all title=Xóai class=fa-solid fa-trashibutton
-                    td`  ''}
-                tr
+                    </td>
+                    <td class="px-4 py-3 min-w-[120px] whitespace-normal break-words text-sm text-slate-600">
+                        ${item.don_vi_thuc_hien || '-'}
+                    </td>
+                    <td class="px-4 py-3 min-w-[180px] whitespace-normal break-words text-sm text-slate-500 italic">
+                        ${item.ghi_chu || '-'}
+                    </td>
+                    <td class="px-4 py-3 text-center whitespace-nowrap">
+                        <span class="text-xs font-bold px-2 py-1 rounded-full border ${item.trang_thai === 'Đóng' ? 'bg-red-50 text-red-700 border-red-100' : 'bg-green-50 text-green-700 border-green-100'}">${item.trang_thai}</span>
+                    </td>
+                    <td class="px-4 py-3 whitespace-nowrap">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-slate-700 max-w-[100px] truncate" title="${item.nguoi_nhap || 'N/A'}">${item.nguoi_nhap || 'N/A'}</span>
+                            <span class="text-[10px] text-slate-400">${formatDateTime(item.thoi_gian_nhap)}</span>
+                        </div>
+                    </td>
+                    ${isAdmin ? `<td class="px-4 py-3 text-right whitespace-nowrap">
+                        <button onclick="openEditModal(event, '${item.id}')" class="text-slate-400 hover:text-blue-600 hover:bg-white p-2 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-all" title="Chỉnh sửa"><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button onclick="deleteBienDong(event, '${item.id}')" class="text-slate-400 hover:text-red-600 hover:bg-white p-2 rounded shadow-sm opacity-0 group-hover:opacity-100 transition-all" title="Xóa"><i class="fa-solid fa-trash"></i></button>
+                    </td>` : ''}
+                </tr>
             `).join('');
 
-             Hiển thị  Ẩn nút Xem thêm dựa vào tổng số dữ liệu
+            // Hiển thị / Ẩn nút "Xem thêm" dựa vào tổng số dữ liệu
             if (loadMoreBtn) {
-                if (data.length  currentDisplayLimit) {
+                if (data.length > currentDisplayLimit) {
                     loadMoreBtn.classList.remove('hidden');
                 } else {
                     loadMoreBtn.classList.add('hidden');
@@ -917,24 +917,24 @@ body class=text-slate-800
         let editingRecordId = null;
 
         function openEditModal(event, id) {
-             Chặn sự kiện click tràn xuống row (tránh mở luôn cả viewModal)
+            // Chặn sự kiện click tràn xuống row (tránh mở luôn cả viewModal)
             event.stopPropagation();
             
-            const record = allHistoryData.find(item = item.id == id);
+            const record = allHistoryData.find(item => item.id == id);
             if(!record) return;
 
             editingRecordId = record.id;
             
-            document.getElementById('edit_ngay_bien_dong').value = record.ngay_bien_dong  '';
-            document.getElementById('edit_tuyen').value = record.tuyen  '';
-            document.getElementById('edit_vi_tri_tru').value = record.vi_tri_tru  '';
-            document.getElementById('edit_thiet_bi').value = record.thiet_bi  '';
-            document.getElementById('edit_trang_thai').value = record.trang_thai  '';
-            document.getElementById('edit_pha').value = record.pha  '';
-            document.getElementById('edit_tai_san').value = record.tai_san  '';
-            document.getElementById('edit_nguyen_nhan').value = record.nguyen_nhan  '';
-            document.getElementById('edit_don_vi_thuc_hien').value = record.don_vi_thuc_hien  '';
-            document.getElementById('edit_ghi_chu').value = record.ghi_chu  '';
+            document.getElementById('edit_ngay_bien_dong').value = record.ngay_bien_dong || '';
+            document.getElementById('edit_tuyen').value = record.tuyen || '';
+            document.getElementById('edit_vi_tri_tru').value = record.vi_tri_tru || '';
+            document.getElementById('edit_thiet_bi').value = record.thiet_bi || '';
+            document.getElementById('edit_trang_thai').value = record.trang_thai || '';
+            document.getElementById('edit_pha').value = record.pha || '';
+            document.getElementById('edit_tai_san').value = record.tai_san || '';
+            document.getElementById('edit_nguyen_nhan').value = record.nguyen_nhan || '';
+            document.getElementById('edit_don_vi_thuc_hien').value = record.don_vi_thuc_hien || '';
+            document.getElementById('edit_ghi_chu').value = record.ghi_chu || '';
 
             document.getElementById('editModal').classList.remove('hidden');
         }
@@ -946,15 +946,15 @@ body class=text-slate-800
         }
 
         async function deleteBienDong(event, id) {
-             Chặn mở modal xem chi tiết
+            // Chặn mở modal xem chi tiết
             event.stopPropagation();
 
-            if (!confirm('Bạn có chắc chắn muốn xóa biến động này Hành động này không thể hoàn tác.')) {
+            if (!confirm('Bạn có chắc chắn muốn xóa biến động này? Hành động này không thể hoàn tác.')) {
                 return;
             }
 
             try {
-                 Supabase API xóa dòng dữ liệu
+                // Supabase API: xóa dòng dữ liệu
                 const { error } = await supabaseClient
                     .from('bien_dong_luoi_dien')
                     .delete()
@@ -963,15 +963,15 @@ body class=text-slate-800
                 if (error) throw error;
 
                 showToast('Thành công', 'Đã xóa bản ghi thành công', 'success');
-                loadHistory();  Tải lại bảng dữ liệu
+                loadHistory(); // Tải lại bảng dữ liệu
             } catch (error) {
                 console.error(error);
-                showToast('Thất bại', 'Lỗi khi xóa ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi khi xóa: ' + error.message, 'error');
             }
         }
 
         function openViewModal(id) {
-            const record = allHistoryData.find(item = item.id == id);
+            const record = allHistoryData.find(item => item.id == id);
             if(!record) return;
 
             currentViewRecordId = record.id;
@@ -980,40 +980,40 @@ body class=text-slate-800
             
             const trangThaiEl = document.getElementById('view_trang_thai');
             trangThaiEl.innerText = record.trang_thai;
-            trangThaiEl.className = `px-2 py-1 rounded-full text-xs font-bold border ${record.trang_thai === 'Đóng'  'bg-red-50 text-red-700 border-red-200'  'bg-green-50 text-green-700 border-green-200'}`;
+            trangThaiEl.className = `px-2 py-1 rounded-full text-xs font-bold border ${record.trang_thai === 'Đóng' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-green-50 text-green-700 border-green-200'}`;
 
-            document.getElementById('view_tuyen').innerText = record.tuyen  '-';
-            document.getElementById('view_vi_tri').innerText = record.vi_tri_tru  '-';
-            document.getElementById('view_thiet_bi').innerText = record.thiet_bi  '-';
-            document.getElementById('view_pha').innerText = record.pha  '-';
+            document.getElementById('view_tuyen').innerText = record.tuyen || '-';
+            document.getElementById('view_vi_tri').innerText = record.vi_tri_tru || '-';
+            document.getElementById('view_thiet_bi').innerText = record.thiet_bi || '-';
+            document.getElementById('view_pha').innerText = record.pha || '-';
             
             const taiSanEl = document.getElementById('view_tai_san');
-            taiSanEl.innerText = record.tai_san  '-';
-            taiSanEl.className = `font-medium break-words ${record.tai_san === 'ĐL'  'text-black font-bold'  record.tai_san === 'KH'  'text-blue-600 font-bold'  record.tai_san === 'ĐN'  'text-red-600 font-bold'  ''}`;
+            taiSanEl.innerText = record.tai_san || '-';
+            taiSanEl.className = `font-medium break-words ${record.tai_san === 'ĐL' ? 'text-black font-bold' : record.tai_san === 'KH' ? 'text-blue-600 font-bold' : record.tai_san === 'ĐN' ? 'text-red-600 font-bold' : ''}`;
 
-            document.getElementById('view_noidung').innerText = record.nguyen_nhan  '-';
-            document.getElementById('view_donvi').innerText = record.don_vi_thuc_hien  '-';
-            document.getElementById('view_ghichu').innerText = record.ghi_chu  '-';
-            document.getElementById('view_nguoinhap').innerText = record.nguoi_nhap  'NA';
+            document.getElementById('view_noidung').innerText = record.nguyen_nhan || '-';
+            document.getElementById('view_donvi').innerText = record.don_vi_thuc_hien || '-';
+            document.getElementById('view_ghichu').innerText = record.ghi_chu || '-';
+            document.getElementById('view_nguoinhap').innerText = record.nguoi_nhap || 'N/A';
             document.getElementById('view_thoigian').innerText = formatDateTime(record.thoi_gian_nhap);
 
-             Cập nhật trạng thái các ô checklist và thông tin người cập nhật
+            // Cập nhật trạng thái các ô checklist và thông tin người cập nhật
             const checkTypes = ['chk_pmis', 'chk_oms', 'chk_cmis', 'chk_autocad'];
             const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
 
-            checkTypes.forEach(chk = {
-                const isChecked = record[chk]  false;
+            checkTypes.forEach(chk => {
+                const isChecked = record[chk] || false;
                 const chkInput = document.getElementById(chk);
                 const labelEl = chkInput.closest('label');
 
                 chkInput.checked = isChecked;
 
-                 Xử lý khóa UI nếu đã check và người dùng không phải admin
+                // Xử lý khóa UI nếu đã check và người dùng không phải admin
                 if (isChecked && !isAdmin) {
-                    labelEl.classList.remove('cursor-pointer', 'hoverbg-blue-50');
+                    labelEl.classList.remove('cursor-pointer', 'hover:bg-blue-50');
                     labelEl.classList.add('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
                 } else {
-                    labelEl.classList.add('cursor-pointer', 'hoverbg-blue-50');
+                    labelEl.classList.add('cursor-pointer', 'hover:bg-blue-50');
                     labelEl.classList.remove('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
                 }
                 
@@ -1035,21 +1035,21 @@ body class=text-slate-800
             currentViewRecordId = null;
         }
 
-         --- Logic Xử lý Checkbox & Mật khẩu ---
+        // --- Logic Xử lý Checkbox & Mật khẩu ---
         function handleCheck(event, type) {
-            event.preventDefault();  Chặn đổi UI ngay lập tức
+            event.preventDefault(); // Chặn đổi UI ngay lập tức
             
-             if(currentUserProfile.role === 'viewer') {
-                showToast('Lỗi phân quyền', 'Tài khoản Viewer không có quyền cập nhật.', 'error');
-                return;
-             }
+            // if(currentUserProfile.role === 'viewer') {
+            //    showToast('Lỗi phân quyền', 'Tài khoản Viewer không có quyền cập nhật.', 'error');
+            //    return;
+            // }
 
-            const record = allHistoryData.find(item = item.id == currentViewRecordId);
+            const record = allHistoryData.find(item => item.id == currentViewRecordId);
             if(!record) return;
 
-            const isCurrentlyChecked = record[type]  false;
+            const isCurrentlyChecked = record[type] || false;
 
-             KIỂM TRA QUYỀN UNCHECK Nếu đã check rồi thì chỉ admin mới được bỏ check
+            // KIỂM TRA QUYỀN UNCHECK: Nếu đã check rồi thì chỉ admin mới được bỏ check
             if (isCurrentlyChecked && currentUserProfile.role !== 'admin') {
                 showToast('Bị khóa', 'Tiến độ đã được đánh dấu hoàn thành. Chỉ Admin mới có quyền bỏ đánh dấu.', 'error');
                 return;
@@ -1059,16 +1059,16 @@ body class=text-slate-800
             desiredCheckState = !isCurrentlyChecked;
             
             const checkNames = {
-                'chk_pmis' 'Cập nhật PMIS',
-                'chk_oms' 'Cập nhật OMS',
-                'chk_cmis' 'Cập nhật CMIS',
-                'chk_autocad' 'Cập nhật Autocad'
+                'chk_pmis': 'Cập nhật PMIS',
+                'chk_oms': 'Cập nhật OMS',
+                'chk_cmis': 'Cập nhật CMIS',
+                'chk_autocad': 'Cập nhật Autocad'
             };
             document.getElementById('confirmModalTitleText').innerText = checkNames[type];
 
             document.getElementById('confirmActionPassword').value = '';
             document.getElementById('confirmPasswordModal').classList.remove('hidden');
-            setTimeout(() = document.getElementById('confirmActionPassword').focus(), 100);
+            setTimeout(() => document.getElementById('confirmActionPassword').focus(), 100);
         }
 
         function closeConfirmPasswordModal() {
@@ -1082,55 +1082,55 @@ body class=text-slate-800
             const btn = document.getElementById('btnConfirmAction');
             const originalText = btn.innerHTML;
             
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>...`;
             btn.disabled = true;
 
             try {
-                 1. Xác thực bằng mật khẩu
-                const { error authError } = await supabaseClient.auth.signInWithPassword({
-                    email currentUser.email,
-                    password pwd
+                // 1. Xác thực bằng mật khẩu
+                const { error: authError } = await supabaseClient.auth.signInWithPassword({
+                    email: currentUser.email,
+                    password: pwd
                 });
 
                 if (authError) {
                     throw new Error('Mật khẩu không chính xác.');
                 }
 
-                 2. Cập nhật vào DB
+                // 2. Cập nhật vào DB
                 const currentTime = new Date().toISOString();
                 const payload = {
-                    [targetCheckType] desiredCheckState,
-                    [`${targetCheckType}_user`] desiredCheckState  currentUserProfile.full_name  null,
-                    [`${targetCheckType}_time`] desiredCheckState  currentTime  null
+                    [targetCheckType]: desiredCheckState,
+                    [`${targetCheckType}_user`]: desiredCheckState ? currentUserProfile.full_name : null,
+                    [`${targetCheckType}_time`]: desiredCheckState ? currentTime : null
                 };
 
-                const { error updateError } = await supabaseClient
+                const { error: updateError } = await supabaseClient
                     .from('bien_dong_luoi_dien')
                     .update(payload)
                     .eq('id', currentViewRecordId);
 
                 if (updateError) throw updateError;
 
-                 3. Cập nhật local data & UI
-                const recordIndex = allHistoryData.findIndex(item = item.id == currentViewRecordId);
+                // 3. Cập nhật local data & UI
+                const recordIndex = allHistoryData.findIndex(item => item.id == currentViewRecordId);
                 if (recordIndex !== -1) {
                     allHistoryData[recordIndex][targetCheckType] = desiredCheckState;
                     allHistoryData[recordIndex][`${targetCheckType}_user`] = payload[`${targetCheckType}_user`];
                     allHistoryData[recordIndex][`${targetCheckType}_time`] = payload[`${targetCheckType}_time`];
                 }
                 
-                 Thay đổi trạng thái UI của checkbox
+                // Thay đổi trạng thái UI của checkbox
                 document.getElementById(targetCheckType).checked = desiredCheckState;
                 const chkInput = document.getElementById(targetCheckType);
                 const labelEl = chkInput.closest('label');
                 const isAdmin = currentUserProfile && currentUserProfile.role === 'admin';
 
-                 Khóa lại ngay lập tức nếu cập nhật thành check (và người dùng ko phải admin)
+                // Khóa lại ngay lập tức nếu cập nhật thành check (và người dùng ko phải admin)
                 if (desiredCheckState && !isAdmin) {
-                    labelEl.classList.remove('cursor-pointer', 'hoverbg-blue-50');
+                    labelEl.classList.remove('cursor-pointer', 'hover:bg-blue-50');
                     labelEl.classList.add('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
                 } else {
-                    labelEl.classList.add('cursor-pointer', 'hoverbg-blue-50');
+                    labelEl.classList.add('cursor-pointer', 'hover:bg-blue-50');
                     labelEl.classList.remove('cursor-not-allowed', 'opacity-60', 'bg-slate-100');
                 }
 
@@ -1143,7 +1143,7 @@ body class=text-slate-800
                     infoDiv.classList.add('hidden');
                 }
 
-                 Cập nhật lại UI bảng bên ngoài lập tức
+                // Cập nhật lại UI bảng bên ngoài lập tức
                 filterTableLocal();
 
                 showToast('Thành công', 'Đã cập nhật tiến độ.', 'success');
@@ -1163,21 +1163,21 @@ body class=text-slate-800
 
             const btn = document.getElementById('btnUpdate');
             const originalText = btn.innerHTML;
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini Cập nhật...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Cập nhật...`;
             btn.disabled = true;
 
             try {
                 const payload = {
-                    ngay_bien_dong document.getElementById('edit_ngay_bien_dong').value,
-                    tuyen document.getElementById('edit_tuyen').value,
-                    vi_tri_tru document.getElementById('edit_vi_tri_tru').value,
-                    thiet_bi document.getElementById('edit_thiet_bi').value,
-                    trang_thai document.getElementById('edit_trang_thai').value,
-                    pha document.getElementById('edit_pha').value,
-                    tai_san document.getElementById('edit_tai_san').value,
-                    nguyen_nhan document.getElementById('edit_nguyen_nhan').value,
-                    don_vi_thuc_hien document.getElementById('edit_don_vi_thuc_hien').value,
-                    ghi_chu document.getElementById('edit_ghi_chu').value,
+                    ngay_bien_dong: document.getElementById('edit_ngay_bien_dong').value,
+                    tuyen: document.getElementById('edit_tuyen').value,
+                    vi_tri_tru: document.getElementById('edit_vi_tri_tru').value,
+                    thiet_bi: document.getElementById('edit_thiet_bi').value,
+                    trang_thai: document.getElementById('edit_trang_thai').value,
+                    pha: document.getElementById('edit_pha').value,
+                    tai_san: document.getElementById('edit_tai_san').value,
+                    nguyen_nhan: document.getElementById('edit_nguyen_nhan').value,
+                    don_vi_thuc_hien: document.getElementById('edit_don_vi_thuc_hien').value,
+                    ghi_chu: document.getElementById('edit_ghi_chu').value,
                 };
 
                 const { error } = await supabaseClient
@@ -1189,10 +1189,10 @@ body class=text-slate-800
 
                 showToast('Thành công', 'Cập nhật thông tin thành công', 'success');
                 closeEditModal();
-                loadHistory();  Tải lại bảng ngay lập tức
+                loadHistory(); // Tải lại bảng ngay lập tức
             } catch (error) {
                 console.error(error);
-                showToast('Thất bại', 'Lỗi khi cập nhật ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi khi cập nhật: ' + error.message, 'error');
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -1203,64 +1203,64 @@ body class=text-slate-800
             sessionData.unshift(item);
             document.getElementById('sessionCount').innerText = sessionData.length;
             const tbody = document.getElementById('sessionTableBody');
-            const row = `tr class=bg-blue-50 animate-pulse-once border-b border-blue-100 hoverbg-blue-100 transition-colors
-                td class=px-4 py-3 whitespace-nowrap
-                    div class=text-xs font-mono text-slate-500${formatTimeOnly(new Date())}div
-                    div class=flex items-center gap-1 mt-1
-                        span class=${item.chk_pmis  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=PMISPspan
-                        span class=${item.chk_oms  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=OMSOspan
-                        span class=${item.chk_cmis  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=CMISCspan
-                        span class=${item.chk_autocad  'bg-blue-100 text-blue-700 border-blue-300'  'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors title=AutocadAspan
-                    div
-                td
-                td class=px-4 py-3div class=font-bold text-blue-700 text-sm${item.tuyen}divdiv class=text-xs text-slate-600${item.vi_tri_tru}divtd
-                td class=px-4 py-3div class=text-xs font-semibold${item.thiet_bi}divdiv class=text-[10px] text-slate-500${item.pha} • span class=${item.tai_san === 'ĐL'  'text-black font-bold'  item.tai_san === 'KH'  'text-blue-600 font-bold'  item.tai_san === 'ĐN'  'text-red-600 font-bold'  ''}${item.tai_san}spandivtd
-                td class=px-4 py-3 max-w-xsdiv class=truncate text-sm text-slate-700 title=${item.nguyen_nhan}${item.nguyen_nhan}div${item.ghi_chu  `div class=truncate text-xs text-slate-400 italic title=${item.ghi_chu}${item.ghi_chu}div`  ''}td
-                td class=px-4 py-3 text-xs text-slate-600 whitespace-nowrap${item.don_vi_thuc_hien  '-'}td
-                td class=px-4 py-3 text-centerspan class=text-[10px] font-bold px-2 py-1 rounded-full border ${item.trang_thai === 'Đóng'  'bg-red-100 text-red-700 border-red-200'  'bg-green-100 text-green-700 border-green-200'}${item.trang_thai}spantd
-            tr`;
+            const row = `<tr class="bg-blue-50 animate-pulse-once border-b border-blue-100 hover:bg-blue-100 transition-colors">
+                <td class="px-4 py-3 whitespace-nowrap">
+                    <div class="text-xs font-mono text-slate-500">${formatTimeOnly(new Date())}</div>
+                    <div class="flex items-center gap-1 mt-1">
+                        <span class="${item.chk_pmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="PMIS">P</span>
+                        <span class="${item.chk_oms ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="OMS">O</span>
+                        <span class="${item.chk_cmis ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="CMIS">C</span>
+                        <span class="${item.chk_autocad ? 'bg-blue-100 text-blue-700 border-blue-300' : 'bg-slate-50 text-slate-300 border-slate-200'} text-[9px] font-bold px-1.5 py-0.5 rounded border transition-colors" title="Autocad">A</span>
+                    </div>
+                </td>
+                <td class="px-4 py-3"><div class="font-bold text-blue-700 text-sm">${item.tuyen}</div><div class="text-xs text-slate-600">${item.vi_tri_tru}</div></td>
+                <td class="px-4 py-3"><div class="text-xs font-semibold">${item.thiet_bi}</div><div class="text-[10px] text-slate-500">${item.pha} • <span class="${item.tai_san === 'ĐL' ? 'text-black font-bold' : item.tai_san === 'KH' ? 'text-blue-600 font-bold' : item.tai_san === 'ĐN' ? 'text-red-600 font-bold' : ''}">${item.tai_san}</span></div></td>
+                <td class="px-4 py-3 max-w-xs"><div class="truncate text-sm text-slate-700" title="${item.nguyen_nhan}">${item.nguyen_nhan}</div>${item.ghi_chu ? `<div class="truncate text-xs text-slate-400 italic" title="${item.ghi_chu}">${item.ghi_chu}</div>` : ''}</td>
+                <td class="px-4 py-3 text-xs text-slate-600 whitespace-nowrap">${item.don_vi_thuc_hien || '-'}</td>
+                <td class="px-4 py-3 text-center"><span class="text-[10px] font-bold px-2 py-1 rounded-full border ${item.trang_thai === 'Đóng' ? 'bg-red-100 text-red-700 border-red-200' : 'bg-green-100 text-green-700 border-green-200'}">${item.trang_thai}</span></td>
+            </tr>`;
             if(sessionData.length === 1) tbody.innerHTML = '';
             tbody.insertAdjacentHTML('afterbegin', row);
         }
 
-         --- ADMIN Logic ---
+        // --- ADMIN Logic ---
         async function loadAdminData() {
             if(currentUserProfile.role !== 'admin') return;
             
             const tbody = document.getElementById('adminUsersTable');
-            tbody.innerHTML = `trtd colspan=4 class=p-8 text-centeri class=fa-solid fa-spinner fa-spin text-blue-500 text-2xlitdtr`;
+            tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center"><i class="fa-solid fa-spinner fa-spin text-blue-500 text-2xl"></i></td></tr>`;
 
-             Thay đổi order từ 'created_at' thành 'full_name' để tránh lỗi thiếu cột
-            const { data, error } = await supabaseClient.from('profiles').select('').order('full_name', { ascending true });
+            // Thay đổi order từ 'created_at' thành 'full_name' để tránh lỗi thiếu cột
+            const { data, error } = await supabaseClient.from('profiles').select('*').order('full_name', { ascending: true });
             
             if (error) {
-                tbody.innerHTML = `trtd colspan=4 class=p-4 text-center text-red-500Lỗi tải danh sách ${error.message}tdtr`;
+                tbody.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-red-500">Lỗi tải danh sách: ${error.message}</td></tr>`;
                 return;
             }
 
-             Thống kê
+            // Thống kê
             document.getElementById('statTotal').innerText = data.length;
-            document.getElementById('statAdmin').innerText = data.filter(u = u.role === 'admin').length;
-            document.getElementById('statUser').innerText = data.filter(u = u.role === 'user').length;
-            document.getElementById('statViewer').innerText = data.filter(u = u.role === 'viewer').length;
+            document.getElementById('statAdmin').innerText = data.filter(u => u.role === 'admin').length;
+            document.getElementById('statUser').innerText = data.filter(u => u.role === 'user').length;
+            document.getElementById('statViewer').innerText = data.filter(u => u.role === 'viewer').length;
 
-             Hiển thị bảng
-            tbody.innerHTML = data.map(user = `
-                tr class=hoverbg-slate-50 transition-colors
-                    td class=px-6 py-4 font-bold text-slate-800${user.full_name}td
-                    td class=px-6 py-4 text-slate-600${user.email}td
-                    td class=px-6 py-4
-                        span class=px-2 py-1 text-[10px] font-bold uppercase rounded-full border
-                        ${user.role === 'admin'  'bg-purple-50 text-purple-700 border-purple-200'  
-                          user.role === 'viewer'  'bg-slate-100 text-slate-600 border-slate-200'  
-                          'bg-green-50 text-green-700 border-green-200'}
+            // Hiển thị bảng
+            tbody.innerHTML = data.map(user => `
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-6 py-4 font-bold text-slate-800">${user.full_name}</td>
+                    <td class="px-6 py-4 text-slate-600">${user.email}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2 py-1 text-[10px] font-bold uppercase rounded-full border
+                        ${user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' : 
+                          user.role === 'viewer' ? 'bg-slate-100 text-slate-600 border-slate-200' : 
+                          'bg-green-50 text-green-700 border-green-200'}">
                             ${user.role}
-                        span
-                    td
-                    td class=px-6 py-4 text-right text-xs text-slate-400
-                        ${user.id === currentUser.id  'span class=text-blue-500 font-bold(Bạn)span'  `button onclick=openChangeRoleModal(this) data-id=${user.id} data-name=${user.full_name} data-role=${user.role} class=hovertext-blue-600 hoverunderlinei class=fa-solid fa-user-pen mr-1iSửa quyềnbutton`}
-                    td
-                tr
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right text-xs text-slate-400">
+                        ${user.id === currentUser.id ? '<span class="text-blue-500 font-bold">(Bạn)</span>' : `<button onclick="openChangeRoleModal(this)" data-id="${user.id}" data-name="${user.full_name}" data-role="${user.role}" class="hover:text-blue-600 hover:underline"><i class="fa-solid fa-user-pen mr-1"></i>Sửa quyền</button>`}
+                    </td>
+                </tr>
             `).join('');
         }
 
@@ -1292,24 +1292,24 @@ body class=text-slate-800
             const btn = document.getElementById('btnUpdateRole');
 
             const originalText = btn.innerHTML;
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>...`;
             btn.disabled = true;
 
             try {
-                 Update role in profiles table
+                // Update role in profiles table
                 const { error } = await supabaseClient
                     .from('profiles')
-                    .update({ role newRole })
+                    .update({ role: newRole })
                     .eq('id', userId);
 
                 if (error) throw error;
 
                 showToast('Thành công', 'Đã cập nhật quyền tài khoản', 'success');
                 closeChangeRoleModal();
-                loadAdminData();  Refresh admin table
+                loadAdminData(); // Refresh admin table
             } catch (error) {
                 console.error(error);
-                showToast('Thất bại', 'Lỗi cập nhật quyền ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi cập nhật quyền: ' + error.message, 'error');
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
@@ -1318,10 +1318,10 @@ body class=text-slate-800
 
         async function handleAdminCreateUser(e) {
             e.preventDefault();
-            // BỔ SUNG CHỐT CHẶN BẢO MẬT: Chỉ Admin mới được phép chạy lệnh tạo tài khoản
+            // Chốt chặn bảo mật: Chỉ Admin mới được thực hiện thay đổi quyền
             if (!currentUserProfile || currentUserProfile.role !== 'admin') {
-                showToast('Lỗi phân quyền', 'Chỉ tài khoản Quản trị viên (Admin) mới có quyền tạo tài khoản.', 'error');
-                return; // Dừng hàm lại ngay lập tức, không chạy các lệnh bên dưới
+                showToast('Lỗi phân quyền', 'Chỉ tài khoản Quản trị viên (Admin) mới có quyền thực hiện thao tác này.', 'error');
+                return;
             }
             const name = document.getElementById('newUserFullName').value;
             const email = document.getElementById('newUserEmail').value;
@@ -1330,37 +1330,37 @@ body class=text-slate-800
             const btn = document.getElementById('btnAdminCreate');
 
             const originalText = btn.innerText;
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini Đang tạo...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang tạo...`;
             btn.disabled = true;
 
             try {
-                 1. Tạo Auth User (Dùng adminAuthClient để tránh logout current admin - Tùy thuộc cấu hình Supabase có thể yêu cầu Edge function, nhưng đây là cách front-end best effort)
-                const { data authData, error authError } = await adminAuthClient.auth.signUp({
-                    email email,
-                    password password
+                // 1. Tạo Auth User (Dùng adminAuthClient để tránh logout current admin - Tùy thuộc cấu hình Supabase có thể yêu cầu Edge function, nhưng đây là cách front-end best effort)
+                const { data: authData, error: authError } = await adminAuthClient.auth.signUp({
+                    email: email,
+                    password: password
                 });
 
-                if (authError) throw new Error(Lỗi tạo Auth  + authError.message);
-                if (!authData.user) throw new Error(Không lấy được thông tin User sau khi tạo.);
+                if (authError) throw new Error("Lỗi tạo Auth: " + authError.message);
+                if (!authData.user) throw new Error("Không lấy được thông tin User sau khi tạo.");
 
                 const newUserId = authData.user.id;
 
-                 2. Chèn vào bảng profiles
-                const { error profileError } = await supabaseClient.from('profiles').insert([{
-                    id newUserId,
-                    email email,
-                    full_name name,
-                    role role
+                // 2. Chèn vào bảng profiles
+                const { error: profileError } = await supabaseClient.from('profiles').insert([{
+                    id: newUserId,
+                    email: email,
+                    full_name: name,
+                    role: role
                 }]);
 
                 if (profileError) {
-                    console.error(Lỗi profile, profileError);
-                    throw new Error(Lỗi tạo hồ sơ profile (Có thể do RLS Policy).);
+                    console.error("Lỗi profile:", profileError);
+                    throw new Error("Lỗi tạo hồ sơ profile (Có thể do RLS Policy).");
                 }
 
                 showToast('Thành công', `Đã tạo tài khoản ${email} (${role})`, 'success');
                 document.getElementById('adminCreateUserForm').reset();
-                loadAdminData();  Refresh bảng
+                loadAdminData(); // Refresh bảng
 
             } catch (err) {
                 showToast('Thất bại', err.message, 'error');
@@ -1391,13 +1391,13 @@ body class=text-slate-800
 
             const btn = document.getElementById('btnUpdatePassword');
             const originalText = btn.innerHTML;
-            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini...`;
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>...`;
             btn.disabled = true;
 
             try {
-                 Supabase API cập nhật mật khẩu cho user đang đăng nhập
+                // Supabase API: cập nhật mật khẩu cho user đang đăng nhập
                 const { error } = await supabaseClient.auth.updateUser({
-                    password newPassword
+                    password: newPassword
                 });
 
                 if (error) throw error;
@@ -1406,17 +1406,17 @@ body class=text-slate-800
                 closeChangePasswordModal();
             } catch (error) {
                 console.error(error);
-                showToast('Thất bại', 'Lỗi đổi mật khẩu ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi đổi mật khẩu: ' + error.message, 'error');
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
             }
         }
 
-         --- UI Utilities ---
+        // --- UI Utilities ---
         function switchTab(tabName) {
             const tabs = ['input', 'history', 'admin'];
-            tabs.forEach(t = {
+            tabs.forEach(t => {
                 const btn = document.getElementById(`tab${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 const content = document.getElementById(`content${t.charAt(0).toUpperCase() + t.slice(1)}`);
                 if(btn && content) {
@@ -1444,23 +1444,23 @@ body class=text-slate-800
             toast.classList.remove('hidden', 'border-green-500', 'border-red-500');
             if(type === 'success') {
                 toast.classList.add('border-green-500');
-                iconDiv.innerHTML = 'i class=fa-solid fa-circle-check text-green-500 text-xli';
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-check text-green-500 text-xl"></i>';
                 titleEl.className = 'font-bold text-sm text-green-700';
             } else {
                 toast.classList.add('border-red-500');
-                iconDiv.innerHTML = 'i class=fa-solid fa-circle-exclamation text-red-500 text-xli';
+                iconDiv.innerHTML = '<i class="fa-solid fa-circle-exclamation text-red-500 text-xl"></i>';
                 titleEl.className = 'font-bold text-sm text-red-700';
             }
             titleEl.innerText = title;
             msgEl.innerText = message;
             toast.classList.remove('hidden');
-            setTimeout(() = { toast.classList.add('hidden'); }, 3000);
+            setTimeout(() => { toast.classList.add('hidden'); }, 3000);
         }
 
-        function formatDate(dStr) { if(!dStr) return ''; const [y, m, d] = dStr.split('-'); return `${d}${m}${y}`; }
+        function formatDate(dStr) { if(!dStr) return ''; const [y, m, d] = dStr.split('-'); return `${d}/${m}/${y}`; }
         function formatDateTime(iso) { if(!iso) return ''; return new Date(iso).toLocaleString('vi-VN'); }
-        function formatTimeOnly(dObj) { return dObj.toLocaleTimeString('vi-VN', {hour '2-digit', minute'2-digit'}); }
+        function formatTimeOnly(dObj) { return dObj.toLocaleTimeString('vi-VN', {hour: '2-digit', minute:'2-digit'}); }
 
-    script
-body
-html
+    </script>
+</body>
+</html>
