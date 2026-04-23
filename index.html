@@ -1280,38 +1280,36 @@ body class=text-slate-800
             document.getElementById('changeRoleModal').classList.add('hidden');
         }
 
-      async function handleChangeRoleSubmit(e) {
+        async function handleChangeRoleSubmit(e) {
             e.preventDefault();
-
             // Chốt chặn bảo mật: Chỉ Admin mới được thực hiện thay đổi quyền
             if (!currentUserProfile || currentUserProfile.role !== 'admin') {
                 showToast('Lỗi phân quyền', 'Chỉ tài khoản Quản trị viên (Admin) mới có quyền thực hiện thao tác này.', 'error');
                 return;
             }
-
             const userId = document.getElementById('changeRoleUserId').value;
             const newRole = document.getElementById('changeRoleSelect').value;
             const btn = document.getElementById('btnUpdateRole');
 
             const originalText = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i>...`;
+            btn.innerHTML = `i class=fa-solid fa-spinner fa-spini...`;
             btn.disabled = true;
 
             try {
-                // Update role in profiles table
+                 Update role in profiles table
                 const { error } = await supabaseClient
                     .from('profiles')
-                    .update({ role: newRole })
+                    .update({ role newRole })
                     .eq('id', userId);
+
                 if (error) throw error;
 
                 showToast('Thành công', 'Đã cập nhật quyền tài khoản', 'success');
                 closeChangeRoleModal();
-                loadAdminData();
-            // Refresh admin table
+                loadAdminData();  Refresh admin table
             } catch (error) {
                 console.error(error);
-                showToast('Thất bại', 'Lỗi cập nhật quyền: ' + error.message, 'error');
+                showToast('Thất bại', 'Lỗi cập nhật quyền ' + error.message, 'error');
             } finally {
                 btn.innerHTML = originalText;
                 btn.disabled = false;
